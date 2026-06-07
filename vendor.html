@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Add Product | Easy Buy Vendor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="vendor.js"></script>
+<script src="script.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col" data-page="vendor">
+<header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto h-16">
+<div class="flex items-center gap-6 md:gap-8">
+<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="index.html">Home</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="Browse.html">Categories</a>
+<a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="vendor.html">Sell</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="cart.html">Cart</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="orderTracking.html">Orders</a>
+</div>
+</div>
+<div class="hidden lg:flex flex-1 max-w-md mx-8 justify-center">
+<span class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">storefront</span>
+<span>Vendor Portal</span>
+</span>
+</div>
+<div class="flex items-center gap-2 md:gap-4">
+<a href="Browse.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="inventory_2">inventory_2</a>
+<a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
+<a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
+</div>
+</nav>
+</header>
+
+<main class="flex-grow w-full max-w-max-width-desktop mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-24 md:pb-12">
+<div class="max-w-2xl mx-auto">
+<div class="mb-8">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg">Add a Product</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">List your item on Easy Buy. Photos are stored securely in Firebase Storage.</p>
+</div>
+
+<div id="vendor-alert" class="hidden mb-6 p-4 rounded-xl border font-body-sm text-body-sm" role="alert"></div>
+
+<form id="add-product-form" class="space-y-6">
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30 space-y-5">
+<h2 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">business_center</span>
+Vendor Details
+</h2>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="vendor-name">Business / Vendor Name</label>
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="vendor-name" name="vendorName" placeholder="e.g. Freetown Tech Hub" required type="text"/>
+</div>
+</section>
+
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30 space-y-5">
+<h2 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">inventory</span>
+Product Information
+</h2>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="product-name">Product Name</label>
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="product-name" name="name" placeholder="e.g. Elite Wireless Headphones" required type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="product-description">Description</label>
+<textarea class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary resize-y min-h-[120px]" id="product-description" name="description" placeholder="Describe your product — features, condition, warranty..." required rows="4"></textarea>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="product-price">Price (Le)</label>
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="product-price" min="1" name="price" placeholder="1200" required step="1" type="number"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="product-stock">Stock Quantity</label>
+<input class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="product-stock" min="0" name="stock" placeholder="10" required step="1" type="number" value="1"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="product-category">Category</label>
+<select class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="product-category" name="category" required>
+<option value="">Select a category</option>
+<option value="Electronics">Electronics</option>
+<option value="Fashion">Fashion</option>
+<option value="Home">Home</option>
+<option value="Groceries">Groceries</option>
+</select>
+</div>
+</section>
+
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30 space-y-5">
+<h2 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">add_photo_alternate</span>
+Product Image
+</h2>
+<div class="flex flex-col sm:flex-row gap-6 items-start">
+<label class="flex flex-col items-center justify-center w-full sm:w-48 h-48 rounded-xl border-2 border-dashed border-outline-variant hover:border-primary hover:bg-surface-container-low transition-all cursor-pointer group" for="product-image">
+<span class="material-symbols-outlined text-4xl text-outline group-hover:text-primary mb-2">cloud_upload</span>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-primary text-center px-4">Click to upload</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">JPG, PNG, WebP · Max 5 MB</span>
+<input accept="image/jpeg,image/png,image/webp" class="hidden" id="product-image" name="image" required type="file"/>
+</label>
+<div id="image-preview" class="hidden flex-1 w-full">
+<div class="relative aspect-square max-w-xs rounded-xl overflow-hidden border border-outline-variant bg-white">
+<img alt="Product preview" class="w-full h-full object-cover" id="preview-img" src=""/>
+<button class="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-on-surface hover:text-error transition-colors" id="remove-image" type="button">
+<span class="material-symbols-outlined icon-md">close</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+
+<button class="w-full bg-primary text-on-primary h-14 rounded-full font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed" id="submit-btn" type="submit">
+<span class="material-symbols-outlined" id="submit-icon">publish</span>
+<span id="submit-text">Publish Product</span>
+</button>
+</form>
+</div>
+</main>
+
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 md:hidden bg-surface-container-lowest shadow-lg">
+<a href="index.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a href="Browse.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-label-sm text-label-sm">Categories</span>
+</a>
+<a href="vendor.html" class="nav-item--active flex flex-col items-center justify-center rounded-2xl px-4 py-1 active:scale-95 transition-transform no-underline">
+<span class="material-symbols-outlined icon-filled" data-icon="storefront">storefront</span>
+<span class="font-label-sm text-label-sm">Sell</span>
+</a>
+<a href="orderTracking.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Account</span>
+</a>
+</nav>
+
+<footer class="bg-surface-container-highest mt-auto border-t border-outline-variant hidden md:block">
+<div class="w-full py-8 px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Easy Buy Sierra Leone. Managed Marketplace.</p>
+</div>
+</footer>
+</body>
+</html>

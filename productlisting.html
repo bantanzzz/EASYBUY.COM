@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Easy Buy - Product Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="products.js"></script>
+<script src="script.js"></script>
+</head>
+<body class="bg-background text-on-background" data-page="product">
+<header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto h-16">
+<div class="flex items-center gap-6 md:gap-8">
+<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="index.html">Home</a>
+<a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="Browse.html">Categories</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="cart.html">Cart</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="orderTracking.html">Orders</a>
+</div>
+</div>
+<div class="hidden lg:flex flex-1 max-w-md mx-8">
+<div class="relative w-full search-wrapper">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-primary" placeholder="Search for products, brands..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2 md:gap-4">
+<button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
+<div class="relative">
+<a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+</div>
+<a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
+</div>
+</nav>
+</header>
+<main id="product-detail" class="max-w-max-width-desktop mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-20 md:mb-10">
+<nav class="flex items-center gap-2 mb-6 text-on-surface-variant">
+<a href="index.html" class="font-label-md text-label-md cursor-pointer hover:text-primary">Home</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a id="product-breadcrumb-category-link" href="Browse.html" class="font-label-md text-label-md cursor-pointer hover:text-primary"><span id="product-breadcrumb-category">...</span></a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span id="product-breadcrumb-name" class="font-label-md text-label-md text-on-surface font-bold">Loading...</span>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop">
+<div class="lg:col-span-7 flex flex-col md:flex-row-reverse gap-4">
+<div class="flex-1 aspect-square rounded-xl overflow-hidden bg-white shadow-sm border border-outline-variant">
+<img id="product-image" alt="Product" class="w-full h-full object-contain p-8" src=""/>
+</div>
+<div id="product-thumbnails" class="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto scroll-hide">
+<div class="w-20 h-20 flex-shrink-0 rounded-lg border-2 border-primary overflow-hidden bg-white cursor-pointer transition-transform active:scale-95">
+<img alt="Thumb 1" class="w-full h-full object-cover" data-alt="A close-up high-resolution shot showing the fine texture of the premium leather ear cushion on a pair of matte black headphones. The lighting is soft and directional, highlighting the high-quality stitching and ergonomic design against a pristine light grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjBaVcXFYVOIk9UbuzSMWmce1h71KEqg-jd2eCs1WOM7BBiR_ddKi-rbE54xx2qBl7n9ahfBdSbjVKSmyq1iOIpbOJ5EM71D5vUi2uud62jHR5feak-N-FqCmC0I-GNnHSrhaXyBcF196Joglt5omR6mNZJ5j6m0AXMjnop0TWw7IZF_0kz3Bcvo_lHcL0tJ8DHa5jXz9sLaCjtp0rnmL8EjjxbrsFxPT7bhIjPBThDwkbjgbbuDRRSpu1CM26EnmCOI4L-7Of_q5x"/>
+</div>
+<div class="w-20 h-20 flex-shrink-0 rounded-lg border border-outline-variant overflow-hidden bg-white cursor-pointer transition-transform active:scale-95 hover:border-primary">
+<img alt="Thumb 2" class="w-full h-full object-cover" data-alt="A side view profile of high-end wireless headphones showing the sleek metallic adjustment sliders and the subtle brand logo etched into the matte finish. The lighting creates elegant highlights on the curved surfaces, maintaining a professional and clean e-commerce visual style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD41QcM80nZrMpAS6c_-r2c5dJKRTLm6dQwC507Lzv1C4PZSgRuX8dF35CSwFiua5WOhKCwdfqSREAHEyBCkpRkbydWbohheyO7bVWz7Ctq9lwomSn2-gGi2dW3Yw1M9OQ7Izt2XxkgXEiOztXOmD9uDikzdrtN1GjYiCQqkeDh_jut3p_wl_VNOiJENawn6MBLNmBZD4EwJawrNB5EYYvKguXIj7VKZzxo3XTmTyumiGlZacfpntLg8XRZGIbRI3kwn0Z_sahxrxdL"/>
+</div>
+<div class="w-20 h-20 flex-shrink-0 rounded-lg border border-outline-variant overflow-hidden bg-white cursor-pointer transition-transform active:scale-95 hover:border-primary">
+<img alt="Thumb 3" class="w-full h-full object-cover" data-alt="A top-down view of premium headphones folded neatly, demonstrating their portable design. The shot is crisp and clear, with soft ambient shadows on a white surface, emphasizing the compactness and travel-friendly features of the product." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyVYmpaMp7JOYVMGEabj3Mf_acEzm2jxQXA3oZRi3luMSqhHzksQ9vDfycUVB1cn7wB3TqEy4nl3rlpG6K7Ts44m7n00OWJI5huHcQVsIjAPL_lZDF4_ukG3y3wV926OuSx0wlihdzXWrPUbtMtDC01fZYU_vK5QmCiuyf7Vyocx8geNHx0xtWszCZZi48K6edmZoHKkLSQa6uGO7yL74o2a_FrMUl-4jZUrEvAn-WkuXdNrZOK8etW5OvCmmLPYEOaHN0T_KkMPt6"/>
+</div>
+</div>
+</div>
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div>
+<span id="product-category-label" class="font-label-md text-label-md text-primary uppercase tracking-wider">...</span>
+<h1 id="product-name" class="font-headline-lg text-headline-lg-mobile md:text-headline-lg mt-1 text-on-surface">Loading...</h1>
+<div class="flex items-center gap-3 mt-4">
+<div class="flex items-center text-[#FFB800]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined">star_half</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">(4.8 • 2,150 Reviews)</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-baseline gap-3">
+<span id="product-price" class="font-headline-lg text-headline-lg text-primary">...</span>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low border border-outline-variant">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-secondary" data-icon="store">store</span>
+<span class="font-body-md text-body-md font-semibold">Vendor: <span id="product-vendor">...</span></span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="inventory">inventory</span>
+<span class="font-body-md text-body-md text-on-surface">Stock: <span id="product-stock" class="text-secondary font-bold">...</span></span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<button type="button" class="btn-add-cart w-full h-14 bg-primary text-on-primary rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-transform"><span class="material-symbols-outlined">shopping_cart</span> Add to Cart</button>
+<button type="button" class="btn-buy-now w-full h-14 bg-tertiary-container text-on-tertiary-container rounded-xl font-label-md text-label-md flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-transform"><span class="material-symbols-outlined">bolt</span>Buy Now</button>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="verified">verified</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Verified Quality Guaranteed</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Easy Delivery Nationwide</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-16 border-b border-outline-variant flex gap-8">
+<button class="pb-4 border-b-2 border-primary text-primary font-label-md text-label-md">Description</button>
+<button class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">Specifications</button>
+<button class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">Reviews</button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-desktop mt-8">
+<div class="lg:col-span-2 flex flex-col gap-6">
+<section>
+<h2 class="font-headline-md text-headline-md mb-4">Product Overview</h2>
+<p id="product-description" class="font-body-md text-body-md text-on-surface-variant leading-relaxed">Loading product details...</p>
+</section>
+<section>
+<h2 class="font-headline-md text-headline-md mb-4">Specifications</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8">
+<div class="flex justify-between py-2 border-b border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant">Connectivity</span>
+<span class="font-body-sm text-body-sm font-semibold">Bluetooth 5.2, NFC</span>
+</div>
+<div class="flex justify-between py-2 border-b border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant">Battery Life</span>
+<span class="font-body-sm text-body-sm font-semibold">Up to 40 Hours</span>
+</div>
+<div class="flex justify-between py-2 border-b border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant">Driver Size</span>
+<span class="font-body-sm text-body-sm font-semibold">40mm Dynamic</span>
+</div>
+<div class="flex justify-between py-2 border-b border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant">Charging Port</span>
+<span class="font-body-sm text-body-sm font-semibold">USB-C</span>
+</div>
+</div>
+</section>
+</div>
+<div class="lg:col-span-1">
+<div class="p-6 rounded-2xl bg-primary-fixed-dim text-on-primary-fixed flex flex-col gap-4">
+<span class="material-symbols-outlined text-4xl">security</span>
+<h3 class="font-headline-md text-headline-md leading-tight">Secure Payment Protection</h3>
+<p class="font-body-sm text-body-sm opacity-90">Your transactions are safe with us. We support Orange Money, Africell Money, and Bank Transfers with full escrow protection.</p>
+<div class="flex gap-2 mt-2">
+<div class="h-8 w-12 bg-white rounded border border-outline-variant flex items-center justify-center p-1">
+<img alt="Orange Money" class="h-full object-contain" data-alt="The official circular logo of Orange Money with its distinct orange and white color palette, presented cleanly on a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVROM_SIWxLW7QJdYaHeReoy14iNPfNYzP3CQQMuvjjDTZ76ZfcklNuqagR1BVirZZsfnFGdnW_MaH4oiyF4HHQ1WEPCi-oyLxKFMvTMMlot0pMnQ6KBXO1qV9FQJDq2jjKDstWOzv5AZlFhHulpipbClE1w7hAt7_KQ0OeuXxyOoUjmhVXToOmr4pUI9Auz0UzhKPGDwHpcz3HtKfpHL8KoeuTkv9ka_YLjwKiLzzyfmL90Y8JMhbdrWirK7Gm5Uv9lHs8W1I-7Wj"/>
+</div>
+<div class="h-8 w-12 bg-white rounded border border-outline-variant flex items-center justify-center p-1">
+<img alt="Africell Money" class="h-full object-contain" data-alt="The official purple and white logo of Africell Money service, shown with high clarity for a mobile payment integration interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhckZmrTP6hnKiKoAwyB79G91e7lojTKZdHU-QcBHB2w4-oy50tmML6cP2BaRiyggHeXJMbAUt5OkIlVYeZKzOjyiR2mYQ4w2WgIC7z8cDpsa0uk-C7c42WH3Pe616Tt2xpT4Fn0QhwaE0jwltXqLMJmSGXRgX9ZUv_5Ns4QoXku5jGUWhmCvUzfVzQdIqpjDgcRqVygqTv129iLXXlRONaPyzjI30vWfpwkZLr5_CXGJG73LWS1wDAobxZoQ9eowGqIZjW-uLDAE2"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section class="mt-20">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-md text-headline-md">Related Products</h2>
+<button class="font-label-md text-label-md text-primary flex items-center gap-1 hover:underline">
+                    View All <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter-desktop">
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="aspect-square relative overflow-hidden bg-white p-4">
+<img alt="Related 1" class="w-full h-full object-contain group-hover:scale-105 transition-transform" data-alt="A studio shot of compact white wireless earbuds in their charging case, set against a soft blue gradient background. The lighting is high-key and professional, highlighting the glossy finish and modern industrial design in a clean e-commerce style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5kwBxSE41Bk34kGv5h7Eb2UCbPzgDpBcAghIXXNosnWoCjpxnMIjR9V_GDTatFmk12XeyxVTa3VPIWAgj50iho7NbraPBW-4KQkx2-EFBDgQxgU4LcUjaibRwKtLtmlmpGcsigs5acG5tIkA9OwBWwjnxuf2FAD12Qr8OCEfOdn6XW8cL-01MK_NT23D9XkmGnV7tNlY1dMpemyl06B2HwgsNgjzjN--64urKYh6c68kawhyp7ZTAsrpUwMao8EmS4lkc_QFtl1j7"/>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<h3 class="font-label-md text-label-md text-on-surface truncate">True Wireless Pro Buds</h3>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-[#FFB800]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4.5</span>
+</div>
+<div class="font-body-md text-body-md font-bold text-primary mt-1">SLE 1,200.00</div>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="aspect-square relative overflow-hidden bg-white p-4">
+<img alt="Related 2" class="w-full h-full object-contain group-hover:scale-105 transition-transform" data-alt="A sleek black portable Bluetooth speaker standing vertically, featuring a fabric mesh texture and glowing LED indicators. The image is captured with low-angle lighting to emphasize its rugged yet modern build, perfect for an outdoor or lifestyle tech setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEv-xUFTe8JvsoX4syJ8H1iDw4l-dgxsJjqfO66LPQnMo9r8mFstxqEX5sl_gy2SVmQM5QEqjG3hJzu0SO4e5tk1S3_3TZ1CxvmZ1jg4fG8ZtkhAZLbf8LUGCSUvSEjdvADyrLQ-mCJELdLtmkV5vTo3UXpcPDsmgKdKqfDZr4yZUzlCSzpn0VlZg6OCxYI0ySDusyo6RAuwZABcEeSQAPT_RsyX0CJlNxJD2e-xLNA9i-T2DaNuTtbVPu5jLdUEPHTpQ37NpAgtYr"/>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<h3 class="font-label-md text-label-md text-on-surface truncate">BassBoost Portable Speaker</h3>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-[#FFB800]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4.9</span>
+</div>
+<div class="font-body-md text-body-md font-bold text-primary mt-1">SLE 850.00</div>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="aspect-square relative overflow-hidden bg-white p-4">
+<img alt="Related 3" class="w-full h-full object-contain group-hover:scale-105 transition-transform" data-alt="A high-performance gaming headset with integrated boom microphone, featuring vibrant RGB lighting accents on the earcups. The style is aggressive and tech-focused, with sharp focus and cinematic lighting against a dark, moody background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuSWI9oMCD5ApJtWJg1orKNZxyawmt0-rdjtiXgPAvLz2REzc9R-DotRRjSNhIAlnTdnYhBMZRocX79RTlO79wbLVZqr2rLa0ejwEEpKPNp6gigcKEEglHMXpFZSFQ-JoVbBEScrTgOMcGApNh0I_TEKtakmZ9YINjcE01yMbwq2hSTqadFXGjl-_kPHRNfQWrkrc0HqJ2GBz-i1nrYn13wrmDHxILvbPi66ryuY2wqEw3q41fFegvUbmc6vr_E8XRBnzGTiJ_QIiN"/>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<h3 class="font-label-md text-label-md text-on-surface truncate">G-Series Gaming Headset</h3>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-[#FFB800]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4.7</span>
+</div>
+<div class="font-body-md text-body-md font-bold text-primary mt-1">SLE 2,100.00</div>
+</div>
+</div>
+<div class="group bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+<div class="aspect-square relative overflow-hidden bg-white p-4">
+<img alt="Related 4" class="w-full h-full object-contain group-hover:scale-105 transition-transform" data-alt="An elegant silver metallic laptop stand with a minimalist ergonomic design, holding a sleek modern laptop. The image is bright and airy, representing a professional home office setup with soft natural lighting and a high-trust, corporate feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBALtj50F7qgRmUB7uHonvr3O_fSHZg2jkkhPYOUO9Cuspmm-TL11CR3Kta4F6lf37LhLu7f1twhLm4AqtEaQTullV_XfGPW7Ycto_QdZPo0GQXQWh2e4FJ9xyxNTKg0FdDnHf2tU1lEJ6XNalVmzhVtLVJyruHfphapJ0upmkWBRWuiL5I2onaGLP9UPSaRcLUEYb7cCEn1Y-aqsG_-Gq3sFZmT-xZymHp50VXooP9JifJhdv3A2bw-R4_y-uTzXritCeq6bkcwZvG"/>
+</div>
+<div class="p-4 flex flex-col gap-1">
+<h3 class="font-label-md text-label-md text-on-surface truncate">Aluminum Ergonomic Stand</h3>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-[#FFB800]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4.6</span>
+</div>
+<div class="font-body-md text-body-md font-bold text-primary mt-1">SLE 450.00</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 md:hidden bg-surface-container-lowest shadow-lg rounded-t-xl">
+<a href="index.html" class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform no-underline">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-[10px]">Home</span>
+</a>
+<a href="Browse.html" class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform no-underline">
+<span class="material-symbols-outlined">category</span>
+<span class="font-label-sm text-[10px]">Categories</span>
+</a>
+<a href="cart.html" class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform no-underline">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-sm text-[10px]">Cart</span>
+</a>
+<a href="orderTracking.html" class="flex flex-col items-center justify-center text-on-surface-variant active:scale-95 transition-transform no-underline">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-[10px]">Account</span>
+</a>
+</nav>
+<footer class="hidden md:block bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant mt-20">
+<div class="w-full py-12 px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-8 max-w-max-width-desktop mx-auto">
+<div class="flex flex-col gap-4">
+<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary">Easy Buy</a>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sierra Leone's leading managed marketplace for high-quality electronics and lifestyle products.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold">Company</h4>
+<div class="flex flex-col gap-2">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About Us</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Careers</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold">Support</h4>
+<div class="flex flex-col gap-2">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Returns Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Shipping Info</a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-label-md text-label-md font-bold">Legal</h4>
+<div class="flex flex-col gap-2">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+<div class="max-w-max-width-desktop mx-auto px-margin-desktop py-6 border-t border-outline-variant text-center">
+<span class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Easy Buy Sierra Leone. Managed Marketplace.</span>
+</div>
+</footer>
+
+</body></html>

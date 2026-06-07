@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Easy Buy - Order Tracking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script type="module" src="firebase.js"></script>
+<script src="script.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col" data-page="orders">
+<header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto h-16">
+<div class="flex items-center gap-6 md:gap-8">
+<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="index.html">Home</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="Browse.html">Categories</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="cart.html">Cart</a>
+<a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="orderTracking.html">Orders</a>
+</div>
+</div>
+<div class="hidden lg:flex flex-1 max-w-md mx-8">
+<div class="relative w-full search-wrapper">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-primary" placeholder="Search orders..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2 md:gap-4">
+<button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
+<div class="relative">
+<a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+</div>
+<a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
+</div>
+</nav>
+</header>
+<main class="flex-grow w-full max-w-max-width-desktop mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-24 md:mb-8">
+<div class="mb-8">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span class="font-label-md text-label-md">Back to Orders</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-1">Track Order #EB-882190</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Estimated delivery: Today, 4:00 PM - 6:00 PM</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-3 bg-surface-container-high text-on-surface rounded-xl font-label-md text-label-md flex items-center gap-2 transition-all hover:bg-surface-variant active:scale-95">
+<span class="material-symbols-outlined">receipt_long</span>
+                        View Invoice
+                    </button>
+<button class="px-6 py-3 bg-primary text-on-primary rounded-xl font-label-md text-label-md flex items-center gap-2 transition-all shadow-md active:scale-95">
+<span class="material-symbols-outlined">support_agent</span>
+                        Help
+                    </button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-desktop">
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant">
+<h3 class="font-headline-md text-headline-md mb-6">Delivery Progress</h3>
+<div class="relative space-y-8">
+<div class="absolute left-[15px] top-2 bottom-2 w-0.5 bg-surface-container-highest"></div>
+<div class="absolute left-[15px] top-2 h-[66%] w-0.5 bg-secondary"></div>
+<div class="relative flex gap-4">
+<div class="z-10 w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px] step-active" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Order Placed</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Yesterday, 10:24 AM</p>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="z-10 w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px] step-active" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Picked up from Warehouse</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Today, 8:15 AM</p>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="z-10 w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center ring-4 ring-primary-container/20 animate-pulse">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary font-bold">Out for Delivery</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Today, 1:30 PM • Freetown Hub</p>
+</div>
+</div>
+<div class="relative flex gap-4">
+<div class="z-10 w-8 h-8 rounded-full bg-surface-container-highest text-outline flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">home</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-outline">Delivered</p>
+<p class="font-body-sm text-body-sm text-outline">Expected by 6:00 PM</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-tertiary-fixed text-on-tertiary-fixed p-6 rounded-2xl shadow-sm border border-tertiary-fixed-dim">
+<div class="flex items-start justify-between mb-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined">headset_mic</span>
+</div>
+<span class="bg-tertiary-container/10 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Managed Delivery</span>
+</div>
+<h4 class="font-headline-md text-headline-md mb-2">Need assistance?</h4>
+<p class="font-body-sm text-body-sm mb-4 opacity-90">Our team is monitoring your delivery from the Freetown Central Warehouse to your doorstep.</p>
+<button class="w-full py-3 bg-tertiary text-on-tertiary rounded-xl font-label-md text-label-md hover:bg-on-tertiary-fixed-variant transition-colors">
+                        Chat with Support
+                    </button>
+</div>
+</div>
+<div class="lg:col-span-8 space-y-6">
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-outline-variant h-[400px] relative group">
+<img class="w-full h-full object-cover" data-alt="A detailed digital map interface showing a stylized navigation route through a coastal city. The map features a primary blue path line indicating the delivery journey from a warehouse icon to a home destination. Subtle UI overlays display the delivery vehicle's current position with a pulsing blue marker. The lighting is bright and clean, mimicking a professional high-tech dashboard aesthetic with high contrast and clear cartographic details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnB9AWTk_9xv2MNGs8osTL8uIVTQbHKHXGHCCr5rYxzpa7ojacMnYzbF_AttRP2qs4mX_HZdSsvl6rwsEEpXOHrEIqYwK2sFsd-uH9JTZUPBAOO7lMEv0BYgstylpsSrlLHYCnZHgpBqX-n8f-V00Uk_oZe-L6uRp58ybj5wbpa-qkAVGmB6vyIZCHuDnWIlBbmosgS4WrFVlGhW_ddNvUhO0Y9zVAOzvRvZh5pMiCuFXaqD8XswPHbonzx_-f79g_j7Q-o_CHD1lc"/>
+<div class="absolute bottom-6 right-6 bg-surface-container-lowest p-4 rounded-xl shadow-lg border border-outline-variant flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">person_pin_circle</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Courier</p>
+<p class="font-label-md text-label-md text-on-surface">Ibrahim K.</p>
+</div>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform">
+<span class="material-symbols-outlined">call</span>
+</button>
+</div>
+<div class="absolute top-4 left-4 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-outline-variant shadow-sm flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface">Live Tracking Active</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+                            Order Summary
+                        </h4>
+<div class="space-y-4">
+<div class="flex gap-4">
+<img class="w-16 h-16 rounded-lg object-cover bg-white" data-alt="A professional product shot of high-end athletic sneakers in a vibrant primary blue and white color scheme. The shoes are set against a minimalist light grey background with soft directional lighting that highlights the texture of the mesh and the sleek design. The overall aesthetic is clean, commercial, and matches the premium fintech-inspired brand style of the marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0mBA7elkFmZA1Dn7zxA8u7PHY4RIJkmB_ho6FPB-OK1Rst5YkHMn0-Ujf-JMtSAAiu5mhCBq-8_NFKIvnGxDyzgT7zGmmp64PgRjsFqVwtObvjhfPdaMrE_KIk_t2esYxHkK_wbIaoGkGv2KwOFAJNj3gMeVNrWHC4NiEgl0awTDAUThtcjpBRJdMcY-st0p9xHYO9lMNd2PUb3mxAwdJ7w6tFD9-fB1oLe78PBz_SFG-0ZkxaUPSLddFivvqFX82hNvDUYC4Bv5y"/>
+<div>
+<p class="font-label-md text-label-md">Elite Performance Runner v2</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Size: 42 • Qty: 1</p>
+<p class="font-label-md text-label-md text-primary mt-1">Le 1,250,000</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+                            Payment Details
+                        </h4>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Method</span>
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-[#FF6600] flex items-center justify-center text-[8px] text-white font-bold">OM</div>
+<span class="font-label-md text-label-md">Orange Money</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Subtotal</span>
+<span class="font-body-md text-body-md">Le 1,250,000</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Delivery Fee</span>
+<span class="font-body-md text-body-md text-secondary">Free</span>
+</div>
+<div class="pt-2 mt-2 border-t border-outline-variant flex justify-between items-center">
+<span class="font-label-md text-label-md">Total</span>
+<span class="font-headline-md text-headline-md text-primary">Le 1,250,000</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-2xl border border-outline-variant">
+<h4 class="font-label-md text-label-md text-on-surface-variant mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+                        Delivery Address
+                    </h4>
+<p class="font-body-md text-body-md text-on-surface mb-2">24 Siaka Stevens Street, Freetown, Sierra Leone</p>
+<div class="bg-white/50 p-3 rounded-lg border border-outline-variant inline-flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Instruction: Leave with security guard if not home.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-surface-container-highest dark:bg-inverse-surface w-full mt-auto border-t border-outline-variant dark:border-outline">
+<div class="w-full py-12 px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-8 max-w-max-width-desktop mx-auto">
+<div class="col-span-1 md:col-span-1">
+<h1 class="font-headline-md text-headline-md font-bold text-primary mb-4">Easy Buy</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sierra Leone's most trusted managed marketplace for secure, fast, and reliable commerce.</p>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface font-bold mb-4">Marketplace</h5>
+<ul class="space-y-2">
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Sellers</a></li>
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Affiliates</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface font-bold mb-4">Support</h5>
+<ul class="space-y-2">
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Help Center</a></li>
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Us</a></li>
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Returns</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-label-md text-label-md text-on-surface font-bold mb-4">Legal</h5>
+<ul class="space-y-2">
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-max-width-desktop mx-auto px-margin-mobile md:px-margin-desktop py-6 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Easy Buy Sierra Leone. Managed Marketplace.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">public</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">share</span>
+</div>
+</div>
+</footer>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 md:hidden bg-surface-container-lowest shadow-lg">
+<a href="index.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors active:scale-95 no-underline">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a href="Browse.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors active:scale-95 no-underline">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-label-sm text-label-sm-mobile">Categories</span>
+</a>
+<a href="cart.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors active:scale-95 no-underline">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-sm text-label-sm-mobile">Cart</span>
+</a>
+<a href="orderTracking.html" class="nav-item--active flex flex-col items-center justify-center rounded-2xl px-4 py-1 transition-transform active:scale-95 no-underline">
+<span class="material-symbols-outlined icon-filled" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm-mobile">Account</span>
+</a>
+</nav>
+
+</body></html>

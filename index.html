@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Easy Buy | Managed Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="products.js"></script>
+<script src="script.js"></script>
+</head>
+<body class="bg-background text-on-background" data-page="home">
+   
+    <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
+        <nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto h-16">
+            <div class="flex items-center gap-6 md:gap-8">
+                <a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="index.html">Home</a>
+                    <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="Browse.html">Categories</a>
+                    <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="cart.html">Cart</a>
+                    <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="vendor.html">Sell</a>
+                    <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="orderTracking.html">Orders</a>
+                </div>
+            </div>
+            <div class="hidden lg:flex flex-1 max-w-md mx-8">
+                <div class="relative w-full search-wrapper">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                    <input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-body-md focus:ring-2 focus:ring-primary" placeholder="Search products, brands..." type="text"/>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 md:gap-4">
+                <button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
+                <div class="relative">
+                    <a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
+                    <span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+                </div>
+                <a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-max-width-desktop mx-auto pb-24 md:pb-12">
+       
+        <section class="mt-4 px-margin-mobile md:px-0">
+            <div class="relative h-[240px] md:h-[400px] rounded-xl overflow-hidden shadow-sm">
+                <img class="w-full h-full object-cover" alt="Premium marketplace banner featuring electronics and fashion" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb_0ybQe-AI4sHBlmPd1mzgEw6nf1KE0NgpNTqjgS9cPESxcMjxRIHudCvUxGLka13wLVcWWvPmd9eBDcc-5rsIT9PekPRbDdu_R-U-nNvHQUx_j3hwcPt0jlrTlBL885HGVMiSnW7bHQE6cHOQgS97rhGD5e8tbeh_92FaIz8yWiKmtbs7KrD3d_QH8f0E2ZN0LkB9X8XjEw9zhlxQyoz3tSbDF0f02KV_yUXql8CSwJHVYaBjf_XAKcuIX9SHwqd9ctQujiMytIM"/>
+                <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex flex-col justify-center px-8 md:px-16">
+                    <span class="inline-block bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-md text-label-md mb-4 w-fit">Managed Deals</span>
+                    <h1 class="font-headline-lg-mobile md:font-headline-xl text-headline-lg-mobile md:text-headline-xl text-white max-w-md mb-6">Quality Guaranteed on Every Purchase</h1>
+                    <a href="Browse.html" class="btn-shop-now bg-primary text-on-primary h-12 px-8 rounded-full font-label-md text-label-md w-fit hover:bg-primary-container transition-all active:scale-95 inline-flex items-center">Shop Now</a>
+                </div>
+            </div>
+        </section>
+
+       
+        <section class="mt-8 px-margin-mobile md:px-0">
+            <h2 class="font-headline-md text-headline-md mb-6">Popular Categories</h2>
+            <div class="grid grid-cols-4 md:grid-cols-4 gap-4 md:gap-8">
+                <a href="Browse.html" class="flex flex-col items-center gap-2 group cursor-pointer no-underline text-inherit">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-surface-container-high rounded-2xl flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all">
+                        <span class="material-symbols-outlined icon-lg" data-icon="devices">devices</span>
+                    </div>
+                    <span class="font-label-md text-label-md">Electronics</span>
+                </a>
+                <a href="Browse.html" class="flex flex-col items-center gap-2 group cursor-pointer no-underline text-inherit">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-surface-container-high rounded-2xl flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all">
+                        <span class="material-symbols-outlined icon-lg" data-icon="apparel">apparel</span>
+                    </div>
+                    <span class="font-label-md text-label-md">Fashion</span>
+                </a>
+                <a href="Browse.html" class="flex flex-col items-center gap-2 group cursor-pointer no-underline text-inherit">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-surface-container-high rounded-2xl flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all">
+                        <span class="material-symbols-outlined icon-lg" data-icon="home_appliance">home_iot_device</span>
+                    </div>
+                    <span class="font-label-md text-label-md">Home</span>
+                </a>
+                <a href="Browse.html" class="flex flex-col items-center gap-2 group cursor-pointer no-underline text-inherit">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-surface-container-high rounded-2xl flex items-center justify-center group-hover:bg-primary-container group-hover:text-on-primary-container transition-all">
+                        <span class="material-symbols-outlined icon-lg" data-icon="grocery">grocery</span>
+                    </div>
+                    <span class="font-label-md text-label-md">Groceries</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="mt-12 px-margin-mobile md:px-0">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="font-headline-md text-headline-md">Featured Products</h2>
+                    <p class="font-body-sm text-body-sm text-on-surface-variant">Handpicked quality items for you</p>
+                </div>
+                <a href="Browse.html" class="btn-view-all text-primary font-label-md text-label-md hover:underline">View All</a>
+            </div>
+            <div id="featured-products" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-gutter-desktop">
+                <p class="col-span-full text-center text-on-surface-variant font-body-sm py-8">Loading products...</p>
+            </div>
+        </section>
+
+        <section class="mt-12 mx-margin-mobile md:mx-0 p-6 bg-surface-container rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h3 class="font-headline-md text-headline-md mb-2">Secure Payments</h3>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">We accept all major mobile money payments in Sierra Leone.</p>
+            </div>
+            <div class="flex gap-4 md:gap-8 overflow-x-auto pb-2">
+                <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-outline-variant/30 flex-shrink-0">
+                    <div class="w-8 h-8 brand-orange rounded-full"></div>
+                    <span class="font-label-md text-label-md">Orange Money</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-outline-variant/30 flex-shrink-0">
+                    <div class="w-8 h-8 brand-red rounded-full"></div>
+                    <span class="font-label-md text-label-md">Africell Money</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-xl shadow-sm border border-outline-variant/30 flex-shrink-0">
+                    <span class="material-symbols-outlined text-primary" data-icon="account_balance">account_balance</span>
+                    <span class="font-label-md text-label-md">Bank Transfer</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 md:hidden bg-surface-container-lowest shadow-lg">
+        <a href="index.html" class="nav-item--active flex flex-col items-center justify-center rounded-2xl px-4 py-1 active:scale-95 transition-transform no-underline">
+            <span class="material-symbols-outlined icon-filled" data-icon="home">home</span>
+            <span class="font-label-sm text-label-sm">Home</span>
+        </a>
+        <a href="Browse.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+            <span class="material-symbols-outlined" data-icon="category">category</span>
+            <span class="font-label-sm text-label-sm">Categories</span>
+        </a>
+        <a href="cart.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+            <span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+            <span class="font-label-sm text-label-sm">Cart</span>
+        </a>
+        <a href="orderTracking.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+            <span class="material-symbols-outlined" data-icon="person">person</span>
+            <span class="font-label-sm text-label-sm">Account</span>
+        </a>
+    </nav>
+
+    <footer class="bg-surface-container-highest mt-auto border-t border-outline-variant">
+        <div class="w-full py-12 px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-8 max-w-max-width-desktop mx-auto">
+            <div class="flex flex-col gap-4">
+                <a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary">Easy Buy</a>
+                <p class="font-body-sm text-body-sm text-on-surface-variant">The most trusted managed marketplace in Sierra Leone. Quality guaranteed, delivery assured.</p>
+            </div>
+            <div>
+                <h4 class="font-label-md text-label-md mb-4 text-on-surface">Quick Links</h4>
+                <ul class="flex flex-col gap-2">
+                    <li><a href="vendor.html" class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Sell on Easy Buy</a></li>
+                    <li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">About Us</li>
+                    <li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Help Center</li>
+                    <li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Privacy Policy</li>
+                    <li class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer">Terms of Service</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-label-md text-label-md mb-4 text-on-surface">Categories</h4>
+                <ul class="flex flex-col gap-2">
+                    <li><a href="Browse.html" class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Electronics</a></li>
+                    <li><a href="Browse.html" class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Fashion</a></li>
+                    <li><a href="Browse.html" class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Home &amp; Living</a></li>
+                    <li><a href="Browse.html" class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors">Groceries</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-label-md text-label-md mb-4 text-on-surface">Newsletter</h4>
+                <p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Get updates on our latest managed deals.</p>
+                <div class="flex gap-2">
+                    <input class="bg-surface-container-low border-outline text-body-sm rounded-lg flex-1" placeholder="Email" type="email"/>
+                    <button class="bg-primary text-white p-2 rounded-lg material-symbols-outlined" data-icon="send">send</button>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-outline-variant py-6 text-center">
+            <p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Easy Buy Sierra Leone. Managed Marketplace.</p>
+        </div>
+    </footer>
+</body>
+</html>
