@@ -7,6 +7,7 @@ import {
   query,
   orderBy,
   limit,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const CATEGORIES = ["Electronics", "Fashion", "Home", "Groceries"];
@@ -18,51 +19,49 @@ document.addEventListener("DOMContentLoaded", () => {
   if (page === "product") initProductDetail();
 });
 
-async function initHomeProducts() {
+function initHomeProducts() {
   const container = document.getElementById("featured-products");
   if (!container) return;
 
-  try {
-    const products = await fetchProducts({ limitCount: 4 });
-    if (products.length === 0) {
-      container.innerHTML = emptyState("No products yet. Vendors can list items from the Sell page.");
-      return;
-    }
-    container.innerHTML = products.map(renderHomeCard).join("");
-  } catch (err) {
-    console.error("Failed to load featured products:", err);
-    container.innerHTML = emptyState("Could not load products. Check your Firebase setup.");
-  }
+  watchProducts(
+    (products) => {
+      if (products.length === 0) {
+        container.innerHTML = emptyState("No products yet. Vendors can list items from the Sell page.", true);
+        return;
+      }
+      container.innerHTML = products.map(renderHomeCard).join("");
+    },
+    { limitCount: 4, onError: () => {
+      container.innerHTML = emptyState("Could not load products. Enable Firestore and apply security rules in Firebase Console.", false);
+    }}
+  );
 }
 
 let allBrowseProducts = [];
 
-async function initBrowseProducts() {
+function initBrowseProducts() {
   const container = document.getElementById("browse-products");
   const countEl = document.getElementById("browse-count");
   if (!container) return;
 
-  try {
-    allBrowseProducts = await fetchProducts();
-    initBrowseFilters();
-
-    const categoryParam = new URLSearchParams(window.location.search).get("category");
-    if (categoryParam && CATEGORIES.includes(categoryParam)) {
-      document.querySelectorAll("[data-category-filter]").forEach((cb) => {
-        cb.checked = cb.dataset.categoryFilter === categoryParam;
-      });
-      applyBrowseFilters();
-    } else {
-      renderBrowseGrid(allBrowseProducts);
-      if (countEl) {
-        countEl.textContent = `Showing ${allBrowseProducts.length} product${allBrowseProducts.length === 1 ? "" : "s"}`;
-      }
-    }
-  } catch (err) {
-    console.error("Failed to load products:", err);
-    container.innerHTML = emptyState("Could not load products. Check your Firebase setup.");
-    if (countEl) countEl.textContent = "Unable to load products";
+  initBrowseFilters();
+  const categoryParam = new URLSearchParams(window.location.search).get("category");
+  if (categoryParam && CATEGORIES.includes(categoryParam)) {
+    document.querySelectorAll("[data-category-filter]").forEach((cb) => {
+      cb.checked = cb.dataset.categoryFilter === categoryParam;
+    });
   }
+
+  watchProducts(
+    (products) => {
+      allBrowseProducts = products;
+      applyBrowseFilters();
+    },
+    { onError: () => {
+      container.innerHTML = emptyState("Could not load products. Enable Firestore and apply security rules in Firebase Console.", false);
+      if (countEl) countEl.textContent = "Unable to load products";
+    }}
+  );
 }
 
 function initBrowseFilters() {
@@ -166,14 +165,49 @@ function renderProductDetail(product) {
   if (thumbs) thumbs.classList.add("hidden");
 }
 
-async function fetchProducts({ limitCount } = {}) {
+function watchProducts(callback, { limitCount, onError } = {}) {
   let q = query(collection(db, "products"), orderBy("createdAt", "desc"));
   if (limitCount) q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(limitCount));
 
-  const snapshot = await getDocs(q);
-  return snapshot.docs
+  return onSnapshot(
+    q,
+    (snapshot) => callback(mapProductDocs(snapshot.docs)),
+    async (err) => {
+      console.warn("Live product feed unavailable, using fallback:", err);
+      try {
+        const products = await fetchProductsFallback({ limitCount });
+        callback(products);
+      } catch (fallbackErr) {
+        console.error("Failed to load products:", fallbackErr);
+        if (onError) onError(fallbackErr);
+      }
+    }
+  );
+}
+
+async function fetchProducts({ limitCount } = {}) {
+  try {
+    let q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+    if (limitCount) q = query(collection(db, "products"), orderBy("createdAt", "desc"), limit(limitCount));
+    const snapshot = await getDocs(q);
+    return mapProductDocs(snapshot.docs);
+  } catch {
+    return fetchProductsFallback({ limitCount });
+  }
+}
+
+async function fetchProductsFallback({ limitCount } = {}) {
+  const snapshot = await getDocs(collection(db, "products"));
+  let products = mapProductDocs(snapshot.docs);
+  products.sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
+  if (limitCount) products = products.slice(0, limitCount);
+  return products;
+}
+
+function mapProductDocs(docs) {
+  return docs
     .map((d) => ({ id: d.id, ...d.data() }))
-    .filter((p) => p.status !== "inactive");
+    .filter((p) => p.status !== "inactive" && p.name && p.imageUrl);
 }
 
 function renderHomeCard(product) {
@@ -231,8 +265,11 @@ function renderBrowseCard(product) {
     </div>`;
 }
 
-function emptyState(message) {
-  return `<p class="col-span-full text-center text-on-surface-variant font-body-md py-12">${escapeHtml(message)} <a href="vendor.html" class="text-primary hover:underline">Add a product</a></p>`;
+function emptyState(message, showVendorLink = true) {
+  const vendorLink = showVendorLink
+    ? ` <a href="vendor.html" class="text-primary hover:underline">Add a product</a>`
+    : "";
+  return `<p class="col-span-full text-center text-on-surface-variant font-body-md py-12">${escapeHtml(message)}${vendorLink}</p>`;
 }
 
 function formatPrice(price) {

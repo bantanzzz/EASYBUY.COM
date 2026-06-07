@@ -92,15 +92,26 @@ async function submitProduct(form, imageInput) {
   setLoading(submitBtn, submitText, submitIcon, true);
   hideAlert();
 
+  let imageUrl = "";
+  let storagePath = "";
+
   try {
     const ext = file.name.split(".").pop() || "jpg";
     const safeName = product.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40);
-    const storagePath = `product-images/${Date.now()}_${safeName}.${ext}`;
+    storagePath = `product-images/${Date.now()}_${safeName}.${ext}`;
     const storageRef = ref(storage, storagePath);
+    const contentType = file.type || "image/jpeg";
 
-    await uploadBytes(storageRef, file);
-    const imageUrl = await getDownloadURL(storageRef);
+    await uploadBytes(storageRef, file, { contentType });
+    imageUrl = await getDownloadURL(storageRef);
+  } catch (err) {
+    console.error("Storage upload failed:", err);
+    showAlert(getUploadError(err), "error");
+    setLoading(submitBtn, submitText, submitIcon, false);
+    return;
+  }
 
+  try {
     await addDoc(collection(db, "products"), {
       ...product,
       imageUrl,
@@ -112,14 +123,10 @@ async function submitProduct(form, imageInput) {
     form.reset();
     document.getElementById("image-preview").classList.add("hidden");
     document.getElementById("preview-img").src = "";
-    showAlert("Product published successfully! It will appear in the marketplace shortly.", "success");
+    showSuccess("Product published successfully! It is now live on the marketplace.");
   } catch (err) {
-    console.error("Failed to add product:", err);
-    const message =
-      err.code === "permission-denied"
-        ? "Permission denied. Enable Firestore & Storage in Firebase Console and apply the security rules."
-        : "Failed to publish product. Check your connection and try again.";
-    showAlert(message, "error");
+    console.error("Firestore save failed:", err);
+    showAlert(getFirestoreError(err), "error");
   } finally {
     setLoading(submitBtn, submitText, submitIcon, false);
   }
@@ -141,6 +148,41 @@ function showAlert(message, type) {
   } else {
     alert.classList.add("bg-error-container", "text-on-error-container", "border-error/30");
   }
+}
+
+function showSuccess(message) {
+  const alert = document.getElementById("vendor-alert");
+  alert.classList.remove("hidden", "bg-error-container", "text-on-error-container", "border-error/30");
+  alert.classList.add("bg-secondary-container", "text-on-secondary-container", "border-secondary/30");
+  alert.innerHTML = `${escapeHtml(message)}
+    <span class="block mt-2">
+      <a href="Browse.html" class="text-primary font-semibold hover:underline">View on marketplace</a>
+      ·
+      <a href="index.html" class="text-primary font-semibold hover:underline">Go to home page</a>
+    </span>`;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function getUploadError(err) {
+  if (err.code === "permission-denied" || err.code === "storage/unauthorized") {
+    return "Storage permission denied. In Firebase Console go to Storage → Rules, paste the rules from storage.rules, and click Publish.";
+  }
+  if (err.code === "storage/unauthenticated") {
+    return "Storage requires authentication. Check your Firebase Storage rules.";
+  }
+  return `Image upload failed: ${err.message || "Unknown error"}`;
+}
+
+function getFirestoreError(err) {
+  if (err.code === "permission-denied") {
+    return "Firestore permission denied. In Firebase Console go to Firestore → Rules, paste the rules from firestore.rules, and click Publish.";
+  }
+  return `Could not save product: ${err.message || "Unknown error"}`;
 }
 
 function hideAlert() {
