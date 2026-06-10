@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Browse Products | Easy Buy</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="tailwind-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="products.js"></script>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </head>
 <body class="bg-background text-on-surface font-body-md overflow-x-hidden" data-page="browse">
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
@@ -34,7 +35,7 @@
 <button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
 <div class="relative">
 <a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
-<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center" data-cart-badge>2</span>
 </div>
 <a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
 </div>
@@ -45,7 +46,7 @@
 <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant">
 <div class="flex items-center justify-between mb-6">
 <h2 class="font-headline-md text-headline-md text-primary">Filters</h2>
-<button class="text-label-md font-label-md text-outline hover:text-primary transition-colors">Clear all</button>
+<button type="button" class="btn-clear-filters text-label-md font-label-md text-outline hover:text-primary transition-colors">Clear all</button>
 </div>
 <div class="mb-8">
 <h3 class="font-label-md text-label-md text-on-surface mb-4">Category</h3>
@@ -178,7 +179,7 @@
 <span class="font-label-sm text-[10px]">Account</span>
 </a>
 </nav>
-<button class="fixed right-6 bottom-24 md:bottom-12 w-14 h-14 bg-tertiary-container text-on-tertiary-container rounded-full shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40">
+<button type="button" class="btn-support-chat fixed right-6 bottom-24 md:bottom-12 w-14 h-14 bg-tertiary-container text-on-tertiary-container rounded-full shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40">
 <span class="material-symbols-outlined">chat</span>
 </button>
 

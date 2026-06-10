@@ -138,6 +138,12 @@ function showProductError(message) {
 function renderProductDetail(product) {
   document.title = `${product.name} | Easy Buy`;
 
+  document.body.dataset.currentProductId = product.id;
+  document.body.dataset.currentProductName = product.name;
+  document.body.dataset.currentProductPrice = String(product.price);
+  document.body.dataset.currentProductImage = product.imageUrl || "";
+  document.body.dataset.currentProductCategory = product.category || "";
+
   setText("product-breadcrumb-category", product.category);
   setText("product-breadcrumb-name", product.name);
   setAttr("product-breadcrumb-category-link", "href", `Browse.html?category=${encodeURIComponent(product.category)}`);
@@ -210,14 +216,26 @@ function mapProductDocs(docs) {
     .filter((p) => p.status !== "inactive" && p.name && p.imageUrl);
 }
 
+function encodeProductData(product) {
+  return encodeURIComponent(
+    JSON.stringify({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      category: product.category,
+    })
+  );
+}
+
 function renderHomeCard(product) {
   const isNew = isRecentlyAdded(product.createdAt);
   return `
-    <div class="product-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col group cursor-pointer border border-outline-variant/30 hover:shadow-lg transition-shadow" data-product-id="${product.id}">
+    <div class="product-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col group cursor-pointer border border-outline-variant/30 hover:shadow-lg transition-shadow" data-product-id="${product.id}" data-product="${encodeProductData(product)}">
       <div class="relative aspect-square">
         <img class="w-full h-full object-cover" alt="${escapeHtml(product.name)}" src="${escapeHtml(product.imageUrl)}"/>
         ${isNew ? '<span class="absolute top-2 left-2 bg-tertiary text-white font-label-sm text-label-sm px-2 py-1 rounded">New</span>' : ""}
-        <button class="absolute top-2 right-2 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-on-surface hover:text-error transition-colors">
+        <button type="button" class="btn-favorite absolute top-2 right-2 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-on-surface hover:text-error transition-colors">
           <span class="material-symbols-outlined icon-md" data-icon="favorite">favorite</span>
         </button>
       </div>
@@ -239,10 +257,10 @@ function renderHomeCard(product) {
 function renderBrowseCard(product) {
   const isNew = isRecentlyAdded(product.createdAt);
   return `
-    <div class="product-card group bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 cursor-pointer" data-product-id="${product.id}">
+    <div class="product-card group bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 cursor-pointer" data-product-id="${product.id}" data-product="${encodeProductData(product)}">
       <div class="relative h-48 bg-surface-container-highest overflow-hidden">
         <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${escapeHtml(product.name)}" src="${escapeHtml(product.imageUrl)}"/>
-        <button class="absolute top-3 right-3 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-white transition-colors">
+        <button type="button" class="btn-favorite absolute top-3 right-3 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-white transition-colors">
           <span class="material-symbols-outlined">favorite</span>
         </button>
       </div>

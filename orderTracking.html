@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Easy Buy - Order Tracking</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="tailwind-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="module" src="firebase.js"></script>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </head>
 <body class="bg-background text-on-background min-h-screen flex flex-col" data-page="orders">
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
@@ -33,7 +34,7 @@
 <button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
 <div class="relative">
 <a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
-<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center" data-cart-badge>2</span>
 </div>
 <a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
 </div>
@@ -51,11 +52,11 @@
 <p class="font-body-md text-body-md text-on-surface-variant">Estimated delivery: Today, 4:00 PM - 6:00 PM</p>
 </div>
 <div class="flex gap-3">
-<button class="px-6 py-3 bg-surface-container-high text-on-surface rounded-xl font-label-md text-label-md flex items-center gap-2 transition-all hover:bg-surface-variant active:scale-95">
+<button type="button" class="btn-view-invoice px-6 py-3 bg-surface-container-high text-on-surface rounded-xl font-label-md text-label-md flex items-center gap-2 transition-all hover:bg-surface-variant active:scale-95">
 <span class="material-symbols-outlined">receipt_long</span>
                         View Invoice
                     </button>
-<button class="px-6 py-3 bg-primary text-on-primary rounded-xl font-label-md text-label-md flex items-center gap-2 transition-all shadow-md active:scale-95">
+<button type="button" class="btn-order-help px-6 py-3 bg-primary text-on-primary rounded-xl font-label-md text-label-md flex items-center gap-2 transition-all shadow-md active:scale-95">
 <span class="material-symbols-outlined">support_agent</span>
                         Help
                     </button>
@@ -116,7 +117,7 @@
 </div>
 <h4 class="font-headline-md text-headline-md mb-2">Need assistance?</h4>
 <p class="font-body-sm text-body-sm mb-4 opacity-90">Our team is monitoring your delivery from the Freetown Central Warehouse to your doorstep.</p>
-<button class="w-full py-3 bg-tertiary text-on-tertiary rounded-xl font-label-md text-label-md hover:bg-on-tertiary-fixed-variant transition-colors">
+<button type="button" class="btn-support-chat w-full py-3 bg-tertiary text-on-tertiary rounded-xl font-label-md text-label-md hover:bg-on-tertiary-fixed-variant transition-colors">
                         Chat with Support
                     </button>
 </div>
@@ -133,7 +134,7 @@
 <p class="font-label-md text-label-md text-on-surface">Ibrahim K.</p>
 </div>
 <div class="h-8 w-px bg-outline-variant mx-2"></div>
-<button class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform">
+<button type="button" class="btn-contact-driver w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform">
 <span class="material-symbols-outlined">call</span>
 </button>
 </div>

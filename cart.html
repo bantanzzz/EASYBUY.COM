@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Shopping Cart | Easy Buy</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="tailwind-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="module" src="firebase.js"></script>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </head>
 <body class="flex flex-col min-h-screen" data-page="cart">
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
@@ -33,7 +34,7 @@
 <button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
 <div class="relative">
 <a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
-<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">3</span>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center" data-cart-badge>3</span>
 </div>
 <a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
 </div>
@@ -43,122 +44,38 @@
 <div class="flex flex-col lg:flex-row gap-8">
 <div class="flex-grow">
 <div class="flex items-center justify-between mb-6">
-<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Your Cart (3 Items)</h1>
+<h1 id="cart-title" class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background">Your Cart</h1>
 <button type="button" class="btn-continue-shopping text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
 <span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
                         Continue Shopping</button>
 </div>
-<div class="space-y-4">
-<div class="cart-card-hover bg-surface-container-lowest custom-shadow rounded-xl p-4 flex flex-col md:flex-row gap-4 border border-outline-variant/30">
-<div class="w-full md:w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
-<img alt="Red Running Shoes" class="w-full h-full object-cover" data-alt="A pair of vibrant red professional running sneakers showcased against a clean, minimalist studio background. The lighting is high-key and soft, emphasizing the sleek textures and modern design of the footwear. The overall aesthetic is professional and high-trust, utilizing a crisp light-mode palette with subtle blue accents in the shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPURAFyc8y4aRIr777eAsCeVBN2koMJV3M1aKXfltapogFENu8XO6GHGb_twqb877b73kZqf8Eoo1PdgcrKZbFbciKil9NCQNVZJ_EW_AKTFZn9oMR9wuelrCYFZmLUMVMuczpxi50TrPjiSjs9GqFVTIN8Nu0Zb5PygfpmX6wpiKv79eKFGAEwGwH2rEsL5toDf7MI1_t1tJZ08fXBsIY2Ys18maJQIVvjJcc640pv4geL_aMuCcJh0d-g0AjVv_a41V3YT2wRXJl"/>
-</div>
-<div class="flex flex-col justify-between flex-grow">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline-md text-body-lg font-bold text-on-surface">Swift Pro Runner X1</h3>
-<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Size: 42 | Color: Electric Red</p>
-</div>
-<p class="font-headline-md text-primary text-body-lg font-bold">Le 1,250</p>
-</div>
-<div class="flex items-center justify-between mt-4">
-<div class="flex items-center border border-outline-variant rounded-lg overflow-hidden bg-surface-container-low">
-<button class="px-3 py-2 hover:bg-surface-variant transition-colors text-on-surface" data-qty="decrement">
-<span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span>
-</button>
-<span class="px-4 py-2 font-label-md text-label-md border-x border-outline-variant bg-white">1</span>
-<button class="px-3 py-2 hover:bg-surface-variant transition-colors text-on-surface" data-qty="increment">
-<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
-</button>
-</div>
-<button class="text-error font-label-md text-label-md flex items-center gap-1 hover:bg-error-container/20 px-3 py-2 rounded-lg transition-colors">
-<span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                                    Remove
-                                </button>
-</div>
-</div>
-</div>
-<div class="cart-card-hover bg-surface-container-lowest custom-shadow rounded-xl p-4 flex flex-col md:flex-row gap-4 border border-outline-variant/30">
-<div class="w-full md:w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
-<img alt="Wireless Headphones" class="w-full h-full object-cover" data-alt="Premium matte black over-ear wireless headphones resting on a minimalist white oak wooden table. The scene is bathed in natural, diffused daylight coming from a window, creating a serene and professional atmosphere. The visual style is contemporary and clean, reflecting a high-end fintech marketplace aesthetic with balanced whites and deep tech-inspired tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACi2yAFxUmMEtndH9gWiyGgbrPgOLd8_L7K9DT-zjUC0AvLw_4392IJ9TB_EWZXBmJPJVd-qegQuIQP-dVDwsdqvzT9Au6ibhNKVdXwJGSvjYh89PoaWPQ0m-vzv6zGM7SlWIW_Ia_bohWqseVVMyyXGmsqHJ-Nu7tsvL8WosDxkSpsWZQ3xhVm1nrPkDzLMj93LaQTTFXuwI2JIu0lB22YJGg0O68-0t5hU-QqM50JAnsZNbRITlqUzjGPLYhnJjO2ICxC3elt3qM"/>
-</div>
-<div class="flex flex-col justify-between flex-grow">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline-md text-body-lg font-bold text-on-surface">SonicWave Noise Cancelling</h3>
-<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Color: Midnight Black</p>
-</div>
-<p class="font-headline-md text-primary text-body-lg font-bold">Le 2,100</p>
-</div>
-<div class="flex items-center justify-between mt-4">
-<div class="flex items-center border border-outline-variant rounded-lg overflow-hidden bg-surface-container-low">
-<button class="px-3 py-2 hover:bg-surface-variant transition-colors text-on-surface" data-qty="decrement">
-<span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span>
-</button>
-<span class="px-4 py-2 font-label-md text-label-md border-x border-outline-variant bg-white">1</span>
-<button class="px-3 py-2 hover:bg-surface-variant transition-colors text-on-surface" data-qty="increment">
-<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
-</button>
-</div>
-<button class="text-error font-label-md text-label-md flex items-center gap-1 hover:bg-error-container/20 px-3 py-2 rounded-lg transition-colors">
-<span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                                    Remove
-                                </button>
-</div>
-</div>
-</div>
-<div class="cart-card-hover bg-surface-container-lowest custom-shadow rounded-xl p-4 flex flex-col md:flex-row gap-4 border border-outline-variant/30">
-<div class="w-full md:w-32 h-32 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
-<img alt="Smart Watch" class="w-full h-full object-cover" data-alt="A luxury silver smartwatch with a white silicone strap displayed on a pristine white marble surface. Sharp, bright lighting highlights the metallic sheen and high-resolution digital display. The overall composition is airy and sophisticated, aligning with a professional corporate-modern design system. The lighting is crisp, evoking a sense of trust and technological precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1UXk4gNQyWS-EIssTTwBKyItQEnZDA72n7gsakpTRkS4Wp7w2xM00xEXbpkAFYMXa6Soe3vvK_pPTcy4UAv2jBGwju529-2CvaoibdPmO42XeqscJ0fLY6S2g_ez3BuS9pvhFlwCtvvHfaKod_s4cy7ONYk5wEZo1xAsn2FxAD5JzMwn-mQCq6nw3KPXSN6oO8UbLu9rBUkY9TOk66Y5R3-TTMUUL8saV5XpYUzFf3_9r2Z-EC9VqURg2wrhb7eYfx3tIuOG-foy5"/>
-</div>
-<div class="flex flex-col justify-between flex-grow">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline-md text-body-lg font-bold text-on-surface">OmniWatch Series 7</h3>
-<p class="text-on-surface-variant font-body-sm text-body-sm mt-1">Strap: Arctic White</p>
-</div>
-<p class="font-headline-md text-primary text-body-lg font-bold">Le 3,450</p>
-</div>
-<div class="flex items-center justify-between mt-4">
-<div class="flex items-center border border-outline-variant rounded-lg overflow-hidden bg-surface-container-low">
-<button class="px-3 py-2 hover:bg-surface-variant transition-colors text-on-surface" data-qty="decrement">
-<span class="material-symbols-outlined text-[18px]" data-icon="remove">remove</span>
-</button>
-<span class="px-4 py-2 font-label-md text-label-md border-x border-outline-variant bg-white">1</span>
-<button class="px-3 py-2 hover:bg-surface-variant transition-colors text-on-surface" data-qty="increment">
-<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
-</button>
-</div>
-<button class="text-error font-label-md text-label-md flex items-center gap-1 hover:bg-error-container/20 px-3 py-2 rounded-lg transition-colors">
-<span class="material-symbols-outlined text-[18px]" data-icon="delete">delete</span>
-                                    Remove
-                                </button>
-</div>
-</div>
-</div>
+<div id="cart-items-list" class="space-y-4"></div>
+<div id="cart-empty" class="hidden text-center py-16 bg-surface-container-low rounded-xl border border-outline-variant/30">
+<p class="font-body-md text-on-surface-variant mb-4">Your cart is empty.</p>
+<button type="button" class="btn-continue-shopping bg-primary text-on-primary px-6 py-3 rounded-full font-label-md">Continue Shopping</button>
 </div>
 </div>
 <div class="w-full lg:w-[380px] flex-shrink-0">
-<div class="bg-surface-container-lowest custom-shadow rounded-2xl p-6 sticky top-24 border border-outline-variant/30">
+<div id="cart-summary" class="bg-surface-container-lowest custom-shadow rounded-2xl p-6 sticky top-24 border border-outline-variant/30">
 <h2 class="font-headline-md text-headline-md text-on-background mb-6">Order Summary</h2>
 <div class="space-y-4 mb-6">
 <div class="flex justify-between font-body-md text-body-md">
 <span class="text-on-surface-variant">Subtotal</span>
-<span class="text-on-surface font-semibold">Le 6,800</span>
+<span id="cart-subtotal" class="text-on-surface font-semibold">Le 6,800</span>
 </div>
 <div class="flex justify-between font-body-md text-body-md">
 <span class="text-on-surface-variant">Delivery Fee</span>
-<span class="text-secondary font-semibold">Le 150</span>
+<span id="cart-delivery" class="text-secondary font-semibold">Le 150</span>
 </div>
 <div class="flex justify-between font-body-md text-body-md">
 <span class="text-on-surface-variant">Tax (VAT 15%)</span>
-<span class="text-on-surface font-semibold">Le 1,020</span>
+<span id="cart-tax" class="text-on-surface font-semibold">Le 1,020</span>
 </div>
 </div>
 <div class="border-t border-outline-variant py-6 mb-6">
 <div class="flex justify-between items-center">
 <span class="font-headline-md text-body-lg font-bold text-on-background">Total</span>
-<span class="font-headline-md text-headline-md font-bold text-primary">Le 7,970</span>
+<span id="cart-total" class="font-headline-md text-headline-md font-bold text-primary">Le 7,970</span>
 </div>
 </div>
 <div class="space-y-4">
@@ -214,7 +131,7 @@
 <p class="text-on-surface-variant font-body-sm text-body-sm mb-4">Get the latest deals and updates.</p>
 <div class="flex">
 <input class="bg-surface-container-low border border-outline rounded-l-lg px-4 py-2 w-full focus:outline-none focus:border-primary" placeholder="Email address" type="email"/>
-<button class="bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-primary-container transition-colors">Join</button>
+<button type="button" class="btn-newsletter bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-primary-container transition-colors">Join</button>
 </div>
 </div>
 </div>

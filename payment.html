@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Easy Buy - Secure Checkout</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="tailwind-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="module" src="firebase.js"></script>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </head>
 <body class="bg-background text-on-background min-h-screen flex flex-col" data-page="payment">
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
@@ -33,7 +34,7 @@
 <button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
 <div class="relative">
 <a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
-<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">3</span>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center" data-cart-badge>3</span>
 </div>
 <a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
 </div>
@@ -49,7 +50,7 @@
 <span class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-label-md">1</span>
 <h2 class="font-headline-md text-headline-md">Delivery Address</h2>
 </div>
-<button class="text-primary font-label-md text-label-md hover:underline cursor-pointer">Change</button>
+<button type="button" class="btn-change-address text-primary font-label-md text-label-md hover:underline cursor-pointer">Change</button>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div class="p-4 rounded-lg border-2 border-primary bg-surface-container-low relative">
@@ -62,7 +63,7 @@
                             </p>
 <p class="text-body-sm text-on-surface-variant mt-2">+232 76 555 123</p>
 </div>
-<button class="p-4 rounded-lg border border-dashed border-outline-variant hover:border-primary hover:bg-surface-container-low transition-all flex flex-col items-center justify-center gap-2 group cursor-pointer">
+<button type="button" class="btn-add-address p-4 rounded-lg border border-dashed border-outline-variant hover:border-primary hover:bg-surface-container-low transition-all flex flex-col items-center justify-center gap-2 group cursor-pointer">
 <span class="material-symbols-outlined text-outline group-hover:text-primary">add_location</span>
 <span class="text-body-sm text-on-surface-variant group-hover:text-primary">Add New Address</span>
 </button>

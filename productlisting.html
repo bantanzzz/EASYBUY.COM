@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Easy Buy - Product Details</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="tailwind-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="products.js"></script>
-<script src="script.js"></script>
+<script type="module" src="script.js"></script>
 </head>
 <body class="bg-background text-on-background" data-page="product">
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
@@ -34,7 +35,7 @@
 <button type="button" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary" data-icon="notifications">notifications</button>
 <div class="relative">
 <a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
-<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">2</span>
+<span class="absolute top-0 right-0 bg-tertiary text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center" data-cart-badge>2</span>
 </div>
 <a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
 </div>
@@ -116,9 +117,9 @@
 </div>
 </div>
 <div class="mt-16 border-b border-outline-variant flex gap-8">
-<button class="pb-4 border-b-2 border-primary text-primary font-label-md text-label-md">Description</button>
-<button class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">Specifications</button>
-<button class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">Reviews</button>
+<button type="button" data-product-tab class="pb-4 border-b-2 border-primary text-primary font-label-md text-label-md">Description</button>
+<button type="button" data-product-tab class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">Specifications</button>
+<button type="button" data-product-tab class="pb-4 border-b-2 border-transparent text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">Reviews</button>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-desktop mt-8">
 <div class="lg:col-span-2 flex flex-col gap-6">
@@ -167,7 +168,7 @@
 <section class="mt-20">
 <div class="flex justify-between items-center mb-8">
 <h2 class="font-headline-md text-headline-md">Related Products</h2>
-<button class="font-label-md text-label-md text-primary flex items-center gap-1 hover:underline">
+<button type="button" class="btn-view-all font-label-md text-label-md text-primary flex items-center gap-1 hover:underline">
                     View All <span class="material-symbols-outlined">arrow_forward</span>
 </button>
 </div>
