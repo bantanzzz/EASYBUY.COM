@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Firebase Connection Test</title>
+<style>
+body { font-family: monospace; padding: 24px; background: #f9f9fc; }
+.pass { color: #16a34a; }
+.fail { color: #dc2626; }
+.info { color: #1d4ed8; }
+pre { background: #fff; padding: 16px; border-radius: 8px; border: 1px solid #e2e2e5; }
+</style>
+</head>
+<body>
+<h1>Easy Buy - Firebase Connection Test</h1>
+<pre id="log">Initializing...</pre>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+import { getFirestore, collection, getDocs, setDoc, doc, deleteField } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL, listAll } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
+
+const log = document.getElementById("log");
+function add(msg, cls="info") {
+  log.innerHTML += `<span class="${cls}">${msg}</span>\n`;
+}
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAwm8uXxDxrgUGYydKp2htfdqpkFwa9ih4",
+  authDomain: "easybuy-c29ba.firebaseapp.com",
+  projectId: "easybuy-c29ba",
+  storageBucket: "easybuy-c29ba.firebasestorage.app",
+  messagingSenderId: "651266478389",
+  appId: "1:651266478389:web:32aa6f8e3e1e3f6d59fc7c"
+};
+
+add("1. Initializing Firebase app...", "info");
+const app = initializeApp(firebaseConfig);
+add("   ✓ App initialized", "pass");
+
+add("\n2. Testing Firestore connection...", "info");
+const db = getFirestore(app);
+try {
+  const snap = await getDocs(collection(db, "products"));
+  add(`   ✓ Firestore connected — documents found: ${snap.docs.length}`, "pass");
+} catch (err) {
+  add(`   ✗ Firestore error: ${err.message}`, "fail");
+}
+
+add("\n3. Testing Storage bucket access...", "info");
+const storage = getStorage(app);
+try {
+  const list = await listAll(ref(storage, "product-images"));
+  add(`   ✓ Storage reachable — objects found: ${list.items.length}`, "pass");
+} catch (err) {
+  add(`   ✗ Storage error: ${err.message}`, "fail");
+}
+
+add("\n4. Summary", "info");
+add("   If all checks show ✓, your Easy Buy app is ready for live vendor adds.", "info");
+</script>
+</body>
+</html>
