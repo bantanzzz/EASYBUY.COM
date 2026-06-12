@@ -1,4 +1,4 @@
-import { db, storage } from "./firebase.js";
+import { db, storage, auth } from "./firebase.js";
 import {
   collection,
   addDoc,
@@ -9,9 +9,21 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const VENDOR_KEY = "easybuy_vendor_name";
+
+let currentVendor = null;
+
+function getVendorName() {
+  try { return localStorage.getItem(VENDOR_KEY); } catch { return ""; }
+}
+
+function setVendorName(name) {
+  try { localStorage.setItem(VENDOR_KEY, name); } catch {}
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   if (document.body.dataset.page !== "vendor") return;
@@ -19,6 +31,27 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initVendorPage() {
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "vendor-auth.html";
+      return;
+    }
+    currentVendor = user;
+    const saved = getVendorName();
+    const nameInput = document.getElementById("vendor-name");
+    if (saved && nameInput && !nameInput.value) {
+      nameInput.value = saved;
+    }
+  });
+
+  const logoutBtn = document.getElementById("vendor-logout");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "vendor-auth.html";
+    });
+  }
+
   const form = document.getElementById("add-product-form");
   const imageInput = document.getElementById("product-image");
   const preview = document.getElementById("image-preview");
@@ -54,6 +87,10 @@ function initVendorPage() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (!currentVendor) {
+      showAlert("You must be logged in to list a product.", "error");
+      return;
+    }
     await submitProduct(form, imageInput);
   });
 }
@@ -70,6 +107,11 @@ async function submitProduct(form, imageInput) {
   }
 
   const formData = new FormData(form);
+  const rawSpecs = (formData.get("specifications") || "").trim();
+  const specifications = rawSpecs
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.includes(":"));
   const product = {
     name: formData.get("name").trim(),
     description: formData.get("description").trim(),
@@ -77,6 +119,7 @@ async function submitProduct(form, imageInput) {
     stock: Number(formData.get("stock")),
     category: formData.get("category"),
     vendorName: formData.get("vendorName").trim(),
+    specifications,
   };
 
   if (!product.name || !product.description || !product.category || !product.vendorName) {
@@ -123,6 +166,7 @@ async function submitProduct(form, imageInput) {
     form.reset();
     document.getElementById("image-preview").classList.add("hidden");
     document.getElementById("preview-img").src = "";
+    setVendorName(product.vendorName);
     showSuccess("Product published successfully! It is now live on the marketplace.");
   } catch (err) {
     console.error("Firestore save failed:", err);

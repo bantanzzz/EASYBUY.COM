@@ -10,7 +10,56 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="module" src="firebase.js"></script>
+<script type="module" src="cart.js"></script>
 <script type="module" src="script.js"></script>
+<script type="module">
+import { getCart, getCartTotals, formatPrice } from "./cart.js";
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.body.dataset.page !== "payment") return;
+  const cart = getCart();
+  const container = document.getElementById("checkout-items");
+  if (!container) return;
+
+  if (cart.length === 0) {
+    container.innerHTML = `<p class="text-body-sm text-on-surface-variant">Your cart is empty.</p>`;
+    document.getElementById("checkout-subtotal").textContent = "Le 0";
+    document.getElementById("checkout-shipping").textContent = "Le 0";
+    document.getElementById("checkout-service").textContent = "Le 0";
+    document.getElementById("checkout-total").textContent = "Le 0";
+    return;
+  }
+
+  container.innerHTML = cart.map((item) => `
+    <div class="flex gap-4">
+      <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+        <img class="w-full h-full object-cover" alt="${escapeHtml(item.name)}" src="${escapeHtml(item.imageUrl)}"/>
+      </div>
+      <div class="flex-grow">
+        <p class="text-body-sm font-medium line-clamp-1">${escapeHtml(item.name)}</p>
+        <p class="text-label-sm text-on-surface-variant">Qty: ${item.qty}${item.variant ? " • " + escapeHtml(item.variant) : ""}</p>
+        <p class="font-label-md text-label-md text-primary">${formatPrice(item.price * item.qty)}</p>
+      </div>
+    </div>
+  `).join("");
+
+  const { subtotal, delivery, tax } = getCartTotals();
+  const serviceFee = Math.round(subtotal * 0.01);
+  const total = subtotal + delivery + tax + serviceFee;
+
+  document.getElementById("checkout-subtotal").textContent = formatPrice(subtotal);
+  document.getElementById("checkout-shipping").textContent = formatPrice(delivery);
+  document.getElementById("checkout-service").textContent = formatPrice(serviceFee);
+  document.getElementById("checkout-total").textContent = formatPrice(total);
+});
+
+function escapeHtml(str) {
+  if (str == null) return "";
+  const div = document.createElement("div");
+  div.textContent = String(str);
+  return div.innerHTML;
+}
+</script>
 </head>
 <body class="bg-background text-on-background min-h-screen flex flex-col" data-page="payment">
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
@@ -152,45 +201,24 @@
 <div class="sticky top-24 space-y-6">
 <section class="bg-surface-container-lowest p-6 rounded-xl shadow-lg border border-outline-variant/50">
 <h2 class="font-headline-md text-headline-md mb-6">Order Review</h2>
-<div class="space-y-4 mb-6">
-<div class="flex gap-4">
-<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
-<img class="w-full h-full object-cover" data-alt="Professional studio shot of a modern, high-tech smartwatch displayed on a minimalist grey surface. The lighting is crisp and cool, highlighting the metallic finish of the watch body and the smooth texture of the silicone strap. The overall mood is sophisticated and clean, perfectly capturing the tech-forward essence of the corporate modern design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoePDOORx87QyqZKk5EYbGZMBqPCBjNOgt0UUme_GYcmanJlnIH1WTa_klfcwLbcv13pN-4MJozKXQUPuzkPKyVxUoPlmo28YEfIEFEKmpt5AlaR4lF5BpKI8eQq0KRSIIfB1Cn7pUqnUN4QbIzpxQl6HimPxOWX3-df4TqIm5A9WK0c5P5VsUw2Zx1mY6W4FLji7GA1gIOIkYjkNQ4ARXtxWsAdQpHONx7ji5BOBe_DZlSZ5cUTZ0dkCmSY9PiKklpIapNrK01GyE"/>
-</div>
-<div class="flex-grow">
-<p class="text-body-sm font-medium line-clamp-1">Pro-Series Smartwatch X1</p>
-<p class="text-label-sm text-on-surface-variant">Qty: 1 • Midnight Blue</p>
-<p class="font-label-md text-label-md text-primary">Le 1,250,000</p>
-</div>
-</div>
-<div class="flex gap-4">
-<div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
-<img class="w-full h-full object-cover" data-alt="A vibrant, high-contrast photograph of a sleek red athletic sneaker positioned against a neutral, well-lit background. The shot utilizes a wide aperture to create a soft, blurred depth of field, focusing sharply on the shoe's textured mesh and dynamic lines. The lighting is bright and professional, evoking a sense of premium quality and energy consistent with a modern fintech-style marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6KpWG6Riui5E7dxUcFbU7bKR5LhU0OyEq2bH0bICH_HlJHyLggOa6HYciSaA7FhH3bnub7n2OXu83_kOYjXOXKE-AYLeQqIaLcgCSe7xf9eL4aQa6JhYmb2g-IbPQboEm0AMms5vAWjTj-70NR_ZNr_85iUle6MJZI38CB7g-jH-pEA0hxxqBSbaiRgw1EeSvf83PQpskG5dqB38F1VfGV_RMdE7lsfg7VbQzWcD724mPCAcDsVkELMBmMbMhioC4G41ZALlvYRC9"/>
-</div>
-<div class="flex-grow">
-<p class="text-body-sm font-medium line-clamp-1">AirSpeed Performance Runners</p>
-<p class="text-label-sm text-on-surface-variant">Qty: 1 • Size 42</p>
-<p class="font-label-md text-label-md text-primary">Le 850,000</p>
-</div>
-</div>
-</div>
+<div id="checkout-items" class="space-y-4 mb-6"></div>
 <hr class="border-outline-variant mb-6"/>
 <div class="space-y-3 mb-6">
 <div class="flex justify-between text-body-md text-on-surface-variant">
 <span>Subtotal</span>
-<span>Le 2,100,000</span>
+<span id="checkout-subtotal">Le 0</span>
 </div>
 <div class="flex justify-between text-body-md text-on-surface-variant">
 <span>Shipping Fee</span>
-<span>Le 45,000</span>
+<span id="checkout-shipping">Le 0</span>
 </div>
 <div class="flex justify-between text-body-md text-on-surface-variant">
 <span>Service Fee</span>
-<span>Le 12,000</span>
+<span id="checkout-service">Le 0</span>
 </div>
 <div class="flex justify-between font-headline-md text-headline-md pt-3 text-on-surface">
 <span>Total</span>
-<span class="text-on-surface">Le 2,157,000</span>
+<span id="checkout-total" class="text-primary font-bold">Le 0</span>
 </div>
 </div>
 <button type="button" class="btn-pay-now w-full bg-tertiary hover:bg-tertiary-container text-white py-4 rounded-xl font-headline-md text-headline-md transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-2 cursor-pointer">

@@ -1,8 +1,129 @@
 body {
     font-family: 'Hanken Grotesk', sans-serif;
-    background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
-    color: #0a0c1e;
+    background: #fafaf9;
+    color: #1c1917;
     -webkit-font-smoothing: antialiased;
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d6d3d1;
+    border-radius: 10px;
+}
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.material-symbols-outlined.icon-filled,
+.step-active {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.material-symbols-outlined.icon-sm {
+    font-size: 16px;
+}
+
+.material-symbols-outlined.icon-md {
+    font-size: 20px;
+}
+
+.material-symbols-outlined.icon-lg {
+    font-size: 32px;
+}
+
+.star-gold {
+    color: #f59e0b;
+}
+
+.glass-effect,
+.glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(231, 229, 228, 0.6);
+}
+
+.custom-shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.fab-shadow {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+.hide-scrollbar::-webkit-scrollbar,
+.scroll-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar,
+.scroll-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.payment-radio:checked + label {
+    border-color: #1e40af;
+    background-color: #eff6ff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.cart-card-hover {
+    transition: transform 0.2s ease;
+}
+
+.cart-card-hover:hover {
+    transform: translateY(-2px);
+}
+button:active,
+.group:active {
+    transform: scale(0.98);
+}
+
+button,
+.group {
+    transition: transform 0.15s ease;
+}
+
+.search-wrapper:has(input:focus) {
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+    border-radius: 9999px;
+}
+
+.search-wrapper.search-focus-scale:has(input:focus) {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+}
+.nav-item--active {
+    background-color: #1e40af;
+    color: #ffffff;
+    border-radius: 1rem;
+    padding: 0.25rem 1rem;
+}
+
+.nav-item--active .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+.product-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+a.site-logo,
+.no-underline {
+    text-decoration: none;
+}
+
+a.site-logo {
+    color: inherit;
 }
 
 

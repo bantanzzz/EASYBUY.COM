@@ -161,6 +161,24 @@ function renderProductDetail(product) {
   setText("product-stock", product.stock > 0 ? `${product.stock} in stock` : "Out of stock");
   setText("product-description", product.description);
 
+  const specsContainer = document.getElementById("product-specifications");
+  if (specsContainer) {
+    if (product.specifications && product.specifications.length > 0) {
+      specsContainer.innerHTML = product.specifications
+        .map((line) => {
+          const [key, ...rest] = line.split(":");
+          const value = rest.join(":").trim();
+          return `<div class="flex justify-between py-2 border-b border-outline-variant">
+            <span class="font-label-md text-label-md text-on-surface-variant">${escapeHtml(key.trim())}</span>
+            <span class="font-body-sm text-body-sm font-semibold">${escapeHtml(value)}</span>
+          </div>`;
+        })
+        .join("");
+    } else {
+      specsContainer.innerHTML = `<p class="text-body-sm text-on-surface-variant col-span-full">No specifications provided.</p>`;
+    }
+  }
+
   const stockEl = document.getElementById("product-stock");
   if (stockEl) {
     stockEl.classList.toggle("text-error", product.stock <= 0);

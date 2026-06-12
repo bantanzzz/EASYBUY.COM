@@ -10,6 +10,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="module" src="firebase.js"></script>
+<script type="module">
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "vendor-auth.html";
+  }
+});
+</script>
 <script type="module" src="vendor.js"></script>
 <script type="module" src="script.js"></script>
 </head>
@@ -21,7 +31,7 @@
 <div class="hidden md:flex items-center gap-6">
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="index.html">Home</a>
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="Browse.html">Categories</a>
-<a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="vendor.html">Sell</a>
+<a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="vendor-auth.html">Sell</a>
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="cart.html">Cart</a>
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="orderTracking.html">Orders</a>
 </div>
@@ -35,7 +45,7 @@
 <div class="flex items-center gap-2 md:gap-4">
 <a href="Browse.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="inventory_2">inventory_2</a>
 <a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
-<a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
+<button type="button" id="vendor-logout" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-error no-underline" data-icon="logout" title="Log out">logout</button>
 </div>
 </nav>
 </header>
@@ -94,6 +104,15 @@ Product Information
 <option value="Groceries">Groceries</option>
 </select>
 </div>
+</section>
+
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30 space-y-5">
+<h2 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">build</span>
+Specifications
+</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Add product specs one per line in <strong>Key: Value</strong> format (e.g. <em>Connectivity: Bluetooth 5.2</em>).</p>
+<textarea class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary resize-y min-h-[120px]" id="product-specifications" name="specifications" placeholder="Connectivity: Bluetooth 5.2, NFC&#10;Battery Life: Up to 40 Hours&#10;Driver Size: 40mm Dynamic&#10;Charging Port: USB-C"></textarea>
 </section>
 
 <section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30 space-y-5">

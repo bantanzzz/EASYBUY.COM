@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vendor Login | Easy Buy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="tailwind-config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="vendor-auth.js"></script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col" data-page="vendor-auth">
+<header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
+<nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto h-16">
+<div class="flex items-center gap-6 md:gap-8">
+<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="index.html">Home</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="Browse.html">Categories</a>
+<a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="vendor-auth.html">Sell</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="cart.html">Cart</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="orderTracking.html">Orders</a>
+</div>
+</div>
+<div class="flex items-center gap-2 md:gap-4">
+<a href="Browse.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="inventory_2">inventory_2</a>
+<a href="cart.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="shopping_cart" data-nav="cart">shopping_cart</a>
+<a href="orderTracking.html" class="material-symbols-outlined text-on-surface-variant cursor-pointer p-2 hover:bg-surface-variant rounded-full transition-colors hover:text-primary no-underline" data-icon="person">person</a>
+</div>
+</nav>
+</header>
+
+<main class="flex-grow w-full max-w-max-width-desktop mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-24 md:pb-12">
+<div class="max-w-md mx-auto">
+<div class="mb-8 text-center">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg">Vendor Portal</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Register or log in to start selling on Easy Buy.</p>
+</div>
+
+<div id="auth-alert" class="hidden mb-6 p-4 rounded-xl border font-body-sm text-body-sm" role="alert"></div>
+
+<div class="bg-surface-container-lowest p-6 md:p-8 rounded-xl shadow-sm border border-outline-variant/30">
+<div class="flex mb-6 border-b border-outline-variant">
+<button id="tab-login" class="flex-1 pb-3 font-label-md text-label-md text-primary border-b-2 border-primary transition-colors" type="button">Log In</button>
+<button id="tab-register" class="flex-1 pb-3 font-label-md text-label-md text-on-surface-variant border-b-2 border-transparent hover:text-primary transition-colors" type="button">Register</button>
+</div>
+
+<form id="login-form" class="space-y-5">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="login-email">Email</label>
+<input autocomplete="email" class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="login-email" required type="email"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="login-password">Password</label>
+<input autocomplete="current-password" class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="login-password" minlength="6" required type="password"/>
+</div>
+<button class="w-full bg-primary text-on-primary h-12 rounded-full font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined" id="login-icon">login</span>
+<span id="login-text">Log In</span>
+</button>
+</form>
+
+<form id="register-form" class="space-y-5 hidden">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="register-name">Business / Vendor Name</label>
+<input autocomplete="organization" class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="register-name" required type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="register-email">Email</label>
+<input autocomplete="email" class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="register-email" required type="email"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="register-password">Password</label>
+<input autocomplete="new-password" class="w-full bg-surface-container-low border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary" id="register-password" minlength="6" required type="password"/>
+</div>
+<button class="w-full bg-primary text-on-primary h-12 rounded-full font-label-md text-label-md hover:bg-primary-container transition-all active:scale-[0.98] flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined" id="register-icon">person_add</span>
+<span id="register-text">Create Account</span>
+</button>
+</form>
+</div>
+</div>
+</main>
+
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 md:hidden bg-surface-container-lowest shadow-lg">
+<a href="index.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a href="Browse.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+<span class="material-symbols-outlined">category</span>
+<span class="font-label-sm text-label-sm">Categories</span>
+</a>
+<a href="vendor-auth.html" class="nav-item--active flex flex-col items-center justify-center rounded-2xl px-4 py-1 active:scale-95 transition-transform no-underline">
+<span class="material-symbols-outlined icon-filled" data-icon="storefront">storefront</span>
+<span class="font-label-sm text-label-sm">Sell</span>
+</a>
+<a href="orderTracking.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm">Account</span>
+</a>
+</nav>
+
+<footer class="bg-surface-container-highest mt-auto border-t border-outline-variant hidden md:block">
+<div class="w-full py-8 px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant">© 2024 Easy Buy Sierra Leone. Managed Marketplace.</p>
+</div>
+</footer>
+</body>
+</html>
