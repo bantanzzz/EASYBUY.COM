@@ -1,6 +1,14 @@
+import { auth, db } from "./firebase.js";
+import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
 const CART_KEY = "easybuy_cart";
 const DELIVERY_FEE = 150;
 const VAT_RATE = 0.15;
+const CART_DEBOUNCE_MS = 300;
+
+let currentUserUid = null;
+let syncInFlight = false;
+let writeTimer = null;
 
 export function getCart() {
   try {
@@ -37,12 +45,14 @@ export function addToCart(item) {
     });
   }
   saveCart(cart);
+  scheduleSync();
   return cart;
 }
 
 export function removeFromCart(id) {
   const cart = getCart().filter((entry) => entry.id !== id);
   saveCart(cart);
+  scheduleSync();
   return cart;
 }
 
@@ -53,6 +63,7 @@ export function updateCartQty(id, qty) {
   if (qty <= 0) return removeFromCart(id);
   item.qty = qty;
   saveCart(cart);
+  scheduleSync();
   return cart;
 }
 
@@ -88,4 +99,80 @@ export function parseProductFromCard(card) {
     imageUrl: card.dataset.productImage || "",
     category: card.dataset.productCategory || "",
   };
+}
+
+async function loadCartFromRemote(uid) {
+  if (syncInFlight) return;
+  syncInFlight = true;
+  try {
+    const ref = doc(db, "carts", uid);
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      const data = snap.data();
+      if (Array.isArray(data.items)) {
+        saveCart(data.items);
+      }
+    }
+  } catch (err) {
+    console.warn("Failed to load cart from Firestore:", err);
+  } finally {
+    syncInFlight = false;
+  }
+}
+
+async function pushCartToRemote(uid, items) {
+  if (writeTimer) clearTimeout(writeTimer);
+  writeTimer = setTimeout(async () => {
+    if (syncInFlight) return;
+    syncInFlight = true;
+    try {
+      const ref = doc(db, "carts", uid);
+      await setDoc(ref, { items, updatedAt: new Date().toISOString() }, { merge: true });
+    } catch (err) {
+      console.warn("Failed to sync cart to Firestore:", err);
+    } finally {
+      syncInFlight = false;
+    }
+  }, CART_DEBOUNCE_MS);
+}
+    }
+  } catch (err) {
+    console.warn("Failed to load cart from Firestore:", err);
+  } finally {
+    syncInFlight = false;
+  }
+}
+
+async function pushCartToRemote(uid, items) {
+  if (writeTimer) clearTimeout(writeTimer);
+  writeTimer = setTimeout(async () => {
+    if (syncInFlight) return;
+    syncInFlight = true;
+    try {
+      const ref = doc(db, "carts", uid);
+      await setDoc(ref, { items, updatedAt: new Date().toISOString() }, { merge: true });
+    } catch (err) {
+      console.warn("Failed to sync cart to Firestore:", err);
+    } finally {
+      syncInFlight = false;
+    }
+  }, CART_DEBOUNCE_MS);
+}
+
+function scheduleSync() {
+  if (!currentUserUid) return;
+  const items = getCart();
+  pushCartToRemote(currentUserUid, items);
+}
+
+export function startCartSync() {
+  if (!auth.currentUser) {
+    currentUserUid = null;
+    return;
+  }
+  const uid = auth.currentUser.uid;
+  if (currentUserUid !== uid) {
+    currentUserUid = uid;
+    loadCartFromRemote(uid);
+  }
 }
