@@ -135,30 +135,6 @@ async function pushCartToRemote(uid, items) {
     }
   }, CART_DEBOUNCE_MS);
 }
-    }
-  } catch (err) {
-    console.warn("Failed to load cart from Firestore:", err);
-  } finally {
-    syncInFlight = false;
-  }
-}
-
-async function pushCartToRemote(uid, items) {
-  if (writeTimer) clearTimeout(writeTimer);
-  writeTimer = setTimeout(async () => {
-    if (syncInFlight) return;
-    syncInFlight = true;
-    try {
-      const ref = doc(db, "carts", uid);
-      await setDoc(ref, { items, updatedAt: new Date().toISOString() }, { merge: true });
-    } catch (err) {
-      console.warn("Failed to sync cart to Firestore:", err);
-    } finally {
-      syncInFlight = false;
-    }
-  }, CART_DEBOUNCE_MS);
-}
-
 function scheduleSync() {
   if (!currentUserUid) return;
   const items = getCart();
