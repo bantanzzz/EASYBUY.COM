@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     container.innerHTML = `<p class="text-body-sm text-on-surface-variant">Your cart is empty.</p>`;
     document.getElementById("checkout-subtotal").textContent = "Le 0";
     document.getElementById("checkout-shipping").textContent = "Le 0";
+    document.getElementById("checkout-tax").textContent = "Le 0";
     document.getElementById("checkout-service").textContent = "Le 0";
     document.getElementById("checkout-total").textContent = "Le 0";
     return;
@@ -49,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("checkout-subtotal").textContent = formatPrice(subtotal);
   document.getElementById("checkout-shipping").textContent = formatPrice(delivery);
+  document.getElementById("checkout-tax").textContent = formatPrice(tax);
   document.getElementById("checkout-service").textContent = formatPrice(serviceFee);
   document.getElementById("checkout-total").textContent = formatPrice(total);
 });
@@ -65,9 +67,9 @@ function escapeHtml(str) {
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
 <nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto h-16">
 <div class="flex items-center gap-6 md:gap-8">
-<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
+<a href="home.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
 <div class="hidden md:flex items-center gap-6">
-<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="index.html">Home</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="home.html">Home</a>
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="Browse.html">Categories</a>
 <a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="cart.html">Cart</a>
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="orderTracking.html">Orders</a>
@@ -130,7 +132,7 @@ function escapeHtml(str) {
 <div class="flex-grow">
 <div class="flex justify-between">
 <p class="font-label-md text-label-md text-on-surface">Easy Buy Managed Delivery</p>
-<p class="font-label-md text-label-md text-secondary">Le 45,000</p>
+<p class="font-label-md text-label-md text-secondary">Le 50</p>
 </div>
 <p class="text-body-sm text-on-surface-variant">Estimated delivery: 2-3 business days. Includes real-time tracking.</p>
 </div>
@@ -173,7 +175,7 @@ function escapeHtml(str) {
 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 <span class="text-on-surface-variant font-label-md text-label-md">+232</span>
 </div>
-<input class="block w-full pl-14 pr-4 py-3 bg-surface-container-lowest border border-outline rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" placeholder="76 000 000" type="tel"/>
+<input class="block w-full pl-14 pr-4 py-3 bg-surface-container-lowest border border-outline rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all font-body-md text-body-md" id="mobile-money-number" inputmode="numeric" maxlength="11" placeholder="76 000 000" type="tel"/>
 </div>
 <p class="mt-3 text-body-sm text-on-surface-variant italic flex items-start gap-2">
 <span class="material-symbols-outlined text-body-sm mt-0.5">info</span>
@@ -213,6 +215,10 @@ function escapeHtml(str) {
 <span id="checkout-shipping">Le 0</span>
 </div>
 <div class="flex justify-between text-body-md text-on-surface-variant">
+<span>VAT</span>
+<span id="checkout-tax">Le 0</span>
+</div>
+<div class="flex justify-between text-body-md text-on-surface-variant">
 <span>Service Fee</span>
 <span id="checkout-service">Le 0</span>
 </div>
@@ -221,6 +227,7 @@ function escapeHtml(str) {
 <span id="checkout-total" class="text-primary font-bold">Le 0</span>
 </div>
 </div>
+<div id="payment-alert" class="hidden mb-4 p-3 rounded-lg border font-body-sm text-body-sm" role="alert"></div>
 <button type="button" class="btn-pay-now w-full bg-tertiary hover:bg-tertiary-container text-white py-4 rounded-xl font-headline-md text-headline-md transition-all active:scale-[0.98] shadow-lg flex items-center justify-center gap-2 cursor-pointer">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
                             Pay Now
@@ -244,7 +251,7 @@ function escapeHtml(str) {
 <footer class="w-full mt-auto bg-surface-container-highest border-t border-outline-variant">
 <div class="w-full py-12 px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-8 max-w-max-width-desktop mx-auto">
 <div class="space-y-4">
-<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary">Easy Buy</a>
+<a href="home.html" class="site-logo font-headline-md text-headline-md font-bold text-primary">Easy Buy</a>
 <p class="text-body-sm text-on-surface-variant">Sierra Leone's most trusted managed marketplace for quality goods and secure payments.</p>
 </div>
 <div>

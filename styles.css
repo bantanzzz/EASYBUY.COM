@@ -126,6 +126,244 @@ a.site-logo {
     color: inherit;
 }
 
+/* Final modern overrides. Keep this block last because this file contains older duplicate rules above. */
+a.site-logo {
+    background: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+.payment-radio:checked + label {
+    background: linear-gradient(145deg, #eef4ff, #ffffff);
+    border-color: var(--eb-blue) !important;
+    box-shadow: 0 0 0 4px rgba(24, 87, 214, 0.1), var(--eb-soft-shadow);
+}
+
+.nav-item--active {
+    background-image: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(24, 87, 214, 0.18);
+}
+
+.search-wrapper:has(input:focus) {
+    box-shadow: 0 0 0 3px rgba(24, 87, 214, 0.16);
+}
+
+/* Final modern overrides. Keep this block last because this file contains older duplicate rules above. */
+a.site-logo {
+    background: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+.payment-radio:checked + label {
+    background: linear-gradient(145deg, #eef4ff, #ffffff);
+    border-color: var(--eb-blue) !important;
+    box-shadow: 0 0 0 4px rgba(24, 87, 214, 0.1), var(--eb-soft-shadow);
+}
+
+.nav-item--active {
+    background-image: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(24, 87, 214, 0.18);
+}
+
+.search-wrapper:has(input:focus) {
+    box-shadow: 0 0 0 3px rgba(24, 87, 214, 0.16);
+}
+
+/* Final modern overrides. Keep this block last because this file contains older duplicate rules above. */
+a.site-logo {
+    background: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+.payment-radio:checked + label {
+    background: linear-gradient(145deg, #eef4ff, #ffffff);
+    border-color: var(--eb-blue) !important;
+    box-shadow: 0 0 0 4px rgba(24, 87, 214, 0.1), var(--eb-soft-shadow);
+}
+
+.nav-item--active {
+    background-image: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(24, 87, 214, 0.18);
+}
+
+.search-wrapper:has(input:focus) {
+    box-shadow: 0 0 0 3px rgba(24, 87, 214, 0.16);
+}
+
+/* Modern polish layer */
+:root {
+    --eb-blue: #1857d6;
+    --eb-blue-dark: #123f9c;
+    --eb-green: #079669;
+    --eb-amber: #f59e0b;
+    --eb-ink: #172033;
+    --eb-muted: #667085;
+    --eb-line: rgba(30, 64, 175, 0.12);
+    --eb-soft-shadow: 0 10px 30px rgba(23, 32, 51, 0.08);
+    --eb-card-shadow: 0 1px 2px rgba(23, 32, 51, 0.06), 0 12px 28px rgba(23, 32, 51, 0.08);
+}
+
+body {
+    background:
+        linear-gradient(180deg, #f7fbff 0%, #fafaf9 34%, #f8fafc 100%);
+    color: var(--eb-ink);
+}
+
+header.bg-surface-container-lowest {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(30, 64, 175, 0.08);
+    box-shadow: 0 8px 24px rgba(23, 32, 51, 0.05);
+}
+
+.site-logo {
+    background: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+    letter-spacing: 0;
+}
+
+header nav a,
+header nav button {
+    border-radius: 9999px;
+}
+
+header nav a:not(.site-logo):hover,
+header nav button:hover {
+    background-color: rgba(24, 87, 214, 0.08);
+}
+
+.search-wrapper input {
+    box-shadow: inset 0 0 0 1px rgba(30, 64, 175, 0.08);
+}
+
+main section > h2,
+main section h1,
+main section h2,
+main section h3 {
+    letter-spacing: 0;
+}
+
+.btn-shop-now,
+.btn-pay-now,
+.btn-checkout,
+.btn-buy-now,
+.btn-add-cart,
+#submit-btn {
+    background-image: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    box-shadow: 0 12px 22px rgba(24, 87, 214, 0.18);
+}
+
+.btn-shop-now:hover,
+.btn-pay-now:hover,
+.btn-checkout:hover,
+.btn-buy-now:hover,
+.btn-add-cart:hover,
+#submit-btn:hover {
+    filter: brightness(1.04);
+    transform: translateY(-1px);
+}
+
+.product-card,
+.cart-card-hover,
+main section.bg-surface-container-lowest,
+main section.bg-surface-container,
+aside .bg-surface-container-low,
+.payment-radio + label {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: var(--eb-line) !important;
+    box-shadow: var(--eb-soft-shadow);
+}
+
+.product-card {
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--eb-card-shadow);
+    border-color: rgba(24, 87, 214, 0.22) !important;
+}
+
+.product-card img {
+    background: #eef4ff;
+}
+
+.btn-cart-icon {
+    background-image: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    box-shadow: 0 8px 16px rgba(24, 87, 214, 0.18);
+}
+
+.btn-favorite {
+    box-shadow: 0 8px 18px rgba(23, 32, 51, 0.12);
+}
+
+section.mt-4 .relative.h-\[240px\],
+section.mt-4 .relative.md\:h-\[400px\] {
+    box-shadow: 0 24px 50px rgba(23, 32, 51, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.42);
+}
+
+section.mt-4 .absolute.inset-0 {
+    background:
+        linear-gradient(90deg, rgba(18, 63, 156, 0.9), rgba(5, 150, 105, 0.58) 48%, rgba(15, 23, 42, 0.08));
+}
+
+section.mt-8 a.group > div {
+    background: linear-gradient(145deg, #ffffff, #eef4ff);
+    border: 1px solid rgba(30, 64, 175, 0.1);
+    box-shadow: 0 10px 22px rgba(23, 32, 51, 0.07);
+}
+
+section.mt-8 a.group:nth-child(2) > div {
+    background: linear-gradient(145deg, #ffffff, #fdf2f8);
+}
+
+section.mt-8 a.group:nth-child(3) > div {
+    background: linear-gradient(145deg, #ffffff, #ecfdf5);
+}
+
+section.mt-8 a.group:nth-child(4) > div {
+    background: linear-gradient(145deg, #ffffff, #fffbeb);
+}
+
+section.mt-8 a.group:hover > div {
+    transform: translateY(-3px);
+    color: var(--eb-blue);
+    border-color: rgba(24, 87, 214, 0.22);
+}
+
+.payment-radio + label {
+    min-height: 128px;
+}
+
+.payment-radio:checked + label {
+    background: linear-gradient(145deg, #eef4ff, #ffffff);
+    border-color: var(--eb-blue) !important;
+    box-shadow: 0 0 0 4px rgba(24, 87, 214, 0.1), var(--eb-soft-shadow);
+}
+
+.nav-item--active {
+    background-image: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(24, 87, 214, 0.18);
+}
+
+footer {
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%) !important;
+}
+
 
 ::-webkit-scrollbar {
     width: 6px;
@@ -251,4 +489,27 @@ a.site-logo,
 
 a.site-logo {
     color: inherit;
+}
+/* Final modern overrides. Keep this block last because this file contains older duplicate rules above. */
+a.site-logo {
+    background: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent !important;
+}
+
+.payment-radio:checked + label {
+    background: linear-gradient(145deg, #eef4ff, #ffffff);
+    border-color: var(--eb-blue) !important;
+    box-shadow: 0 0 0 4px rgba(24, 87, 214, 0.1), var(--eb-soft-shadow);
+}
+
+.nav-item--active {
+    background-image: linear-gradient(135deg, var(--eb-blue), var(--eb-green));
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(24, 87, 214, 0.18);
+}
+
+.search-wrapper:has(input:focus) {
+    box-shadow: 0 0 0 3px rgba(24, 87, 214, 0.16);
 }

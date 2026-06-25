@@ -2,20 +2,30 @@ import { db, storage, auth } from "./firebase.js";
 import {
   collection,
   addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
   serverTimestamp,
+  where,
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 import {
   ref,
   uploadBytes,
   getDownloadURL,
+  deleteObject,
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const VENDOR_KEY = "easybuy_vendor_name";
 
 let currentVendor = null;
+let unsubscribeVendorProducts = null;
 
 function getVendorName() {
   try { return localStorage.getItem(VENDOR_KEY); } catch { return ""; }
@@ -42,6 +52,7 @@ function initVendorPage() {
     if (saved && nameInput && !nameInput.value) {
       nameInput.value = saved;
     }
+    watchVendorProducts(user.uid);
   });
 
   const logoutBtn = document.getElementById("vendor-logout");
@@ -93,6 +104,22 @@ function initVendorPage() {
     }
     await submitProduct(form, imageInput);
   });
+
+  const vendorProductsList = document.getElementById("vendor-products-list");
+  if (vendorProductsList) {
+    vendorProductsList.addEventListener("click", async (e) => {
+      const deleteBtn = e.target.closest("[data-delete-product]");
+      if (!deleteBtn) return;
+
+      const productId = deleteBtn.dataset.deleteProduct;
+      const storagePath = deleteBtn.dataset.storagePath || "";
+      const name = deleteBtn.dataset.productName || "this product";
+      const confirmed = window.confirm(`Delete ${name}? This removes it from the marketplace.`);
+      if (!confirmed) return;
+
+      await deleteVendorProduct(productId, storagePath, deleteBtn);
+    });
+  }
 }
 
 async function submitProduct(form, imageInput) {
@@ -159,6 +186,8 @@ async function submitProduct(form, imageInput) {
       ...product,
       imageUrl,
       storagePath,
+      vendorId: currentVendor.uid,
+      vendorEmail: currentVendor.email || "",
       status: "active",
       createdAt: serverTimestamp(),
     });
@@ -173,6 +202,93 @@ async function submitProduct(form, imageInput) {
     showAlert(getFirestoreError(err), "error");
   } finally {
     setLoading(submitBtn, submitText, submitIcon, false);
+  }
+}
+
+function watchVendorProducts(vendorId) {
+  const list = document.getElementById("vendor-products-list");
+  if (!list) return;
+
+  if (unsubscribeVendorProducts) unsubscribeVendorProducts();
+
+  const vendorProductsQuery = query(collection(db, "products"), where("vendorId", "==", vendorId));
+  unsubscribeVendorProducts = onSnapshot(
+    vendorProductsQuery,
+    (snapshot) => {
+      const products = snapshot.docs
+        .map((productDoc) => ({ id: productDoc.id, ...productDoc.data() }))
+        .sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
+      renderVendorProducts(products);
+    },
+    (err) => {
+      console.error("Failed to load vendor products:", err);
+      list.innerHTML = `<p class="text-center text-error font-body-sm py-6">${escapeHtml(getFirestoreError(err))}</p>`;
+    }
+  );
+}
+
+function renderVendorProducts(products) {
+  const list = document.getElementById("vendor-products-list");
+  if (!list) return;
+
+  if (products.length === 0) {
+    list.innerHTML = `<p class="text-center text-on-surface-variant font-body-sm py-6">No products added from this account yet.</p>`;
+    return;
+  }
+
+  list.innerHTML = products.map(renderVendorProductItem).join("");
+}
+
+function renderVendorProductItem(product) {
+  const imageUrl = product.imageUrl || "";
+  const status = product.status || "active";
+  return `
+    <article class="flex items-center gap-4 rounded-xl border border-outline-variant/40 bg-surface-container-low p-3">
+      <div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-container-highest flex-shrink-0">
+        ${imageUrl
+          ? `<img class="w-full h-full object-cover" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.name)}"/>`
+          : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined">image</span></div>`}
+      </div>
+      <div class="min-w-0 flex-1">
+        <h3 class="font-label-md text-label-md text-on-surface truncate">${escapeHtml(product.name)}</h3>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">${formatPrice(product.price)} &middot; ${escapeHtml(product.category || "Uncategorized")} &middot; ${escapeHtml(status)}</p>
+      </div>
+      <button
+        type="button"
+        class="inline-flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-error hover:bg-error-container/30 font-label-sm text-label-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        data-delete-product="${escapeHtml(product.id)}"
+        data-storage-path="${escapeHtml(product.storagePath || "")}"
+        data-product-name="${escapeHtml(product.name)}"
+      >
+        <span class="material-symbols-outlined text-[18px]">delete</span>
+        Delete
+      </button>
+    </article>`;
+}
+
+async function deleteVendorProduct(productId, storagePath, button) {
+  if (!productId) return;
+
+  const originalHtml = button.innerHTML;
+  button.disabled = true;
+  button.innerHTML = `<span class="material-symbols-outlined text-[18px]">hourglass_top</span>Deleting`;
+  hideAlert();
+
+  try {
+    await deleteDoc(doc(db, "products", productId));
+    if (storagePath) {
+      try {
+        await deleteObject(ref(storage, storagePath));
+      } catch (err) {
+        console.warn("Product image deletion skipped:", err);
+      }
+    }
+    showAlert("Product deleted from the marketplace.", "success");
+  } catch (err) {
+    console.error("Product delete failed:", err);
+    showAlert(getFirestoreError(err), "error");
+    button.disabled = false;
+    button.innerHTML = originalHtml;
   }
 }
 
@@ -202,14 +318,26 @@ function showSuccess(message) {
     <span class="block mt-2">
       <a href="Browse.html" class="text-primary font-semibold hover:underline">View on marketplace</a>
       ·
-      <a href="index.html" class="text-primary font-semibold hover:underline">Go to home page</a>
+      <a href="home.html" class="text-primary font-semibold hover:underline">Go to home page</a>
     </span>`;
 }
 
 function escapeHtml(str) {
+  if (str == null) return "";
   const div = document.createElement("div");
   div.textContent = str;
   return div.innerHTML;
+}
+
+function formatPrice(price) {
+  return `Le ${Number(price || 0).toLocaleString()}`;
+}
+
+function toMillis(timestamp) {
+  if (!timestamp) return 0;
+  if (timestamp.toMillis) return timestamp.toMillis();
+  if (timestamp.seconds) return timestamp.seconds * 1000;
+  return new Date(timestamp).getTime() || 0;
 }
 
 function getUploadError(err) {
@@ -224,9 +352,9 @@ function getUploadError(err) {
 
 function getFirestoreError(err) {
   if (err.code === "permission-denied") {
-    return "Firestore permission denied. In Firebase Console go to Firestore → Rules, paste the rules from firestore.rules, and click Publish.";
+    return "Firestore permission denied. In Firebase Console go to Firestore > Rules, paste the rules from firestore.rules, and click Publish.";
   }
-  return `Could not save product: ${err.message || "Unknown error"}`;
+  return `Could not complete product action: ${err.message || "Unknown error"}`;
 }
 
 function hideAlert() {

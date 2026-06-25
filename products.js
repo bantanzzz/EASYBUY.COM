@@ -137,11 +137,12 @@ function showProductError(message) {
 
 function renderProductDetail(product) {
   document.title = `${product.name} | Easy Buy`;
+  const imageUrl = getProductImage(product);
 
   document.body.dataset.currentProductId = product.id;
   document.body.dataset.currentProductName = product.name;
   document.body.dataset.currentProductPrice = String(product.price);
-  document.body.dataset.currentProductImage = product.imageUrl || "";
+  document.body.dataset.currentProductImage = imageUrl;
   document.body.dataset.currentProductCategory = product.category || "";
 
   setText("product-breadcrumb-category", product.category);
@@ -150,7 +151,7 @@ function renderProductDetail(product) {
 
   const img = document.getElementById("product-image");
   if (img) {
-    img.src = product.imageUrl;
+    img.src = imageUrl;
     img.alt = product.name;
   }
 
@@ -230,8 +231,17 @@ async function fetchProductsFallback({ limitCount } = {}) {
 
 function mapProductDocs(docs) {
   return docs
-    .map((d) => ({ id: d.id, ...d.data() }))
-    .filter((p) => p.status !== "inactive" && p.name && p.imageUrl);
+    .map((d) => {
+      const data = d.data();
+      return {
+        id: d.id,
+        ...data,
+        imageUrl: data.imageUrl || data.photoUrl || data.thumbnailUrl || data.image || "",
+        price: Number(data.price || 0),
+        stock: Number(data.stock || 0),
+      };
+    })
+    .filter((p) => p.status !== "inactive" && p.name);
 }
 
 function encodeProductData(product) {
@@ -240,7 +250,7 @@ function encodeProductData(product) {
       id: product.id,
       name: product.name,
       price: product.price,
-      imageUrl: product.imageUrl,
+      imageUrl: getProductImage(product),
       category: product.category,
     })
   );
@@ -248,10 +258,11 @@ function encodeProductData(product) {
 
 function renderHomeCard(product) {
   const isNew = isRecentlyAdded(product.createdAt);
+  const imageUrl = getProductImage(product);
   return `
     <div class="product-card bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_4px_12px_rgba(0,0,0,0.05)] flex flex-col group cursor-pointer border border-outline-variant/30 hover:shadow-lg transition-shadow" data-product-id="${product.id}" data-product="${encodeProductData(product)}">
       <div class="relative aspect-square">
-        <img class="w-full h-full object-cover" alt="${escapeHtml(product.name)}" src="${escapeHtml(product.imageUrl)}"/>
+        <img class="w-full h-full object-cover" alt="${escapeHtml(product.name)}" src="${escapeHtml(imageUrl)}"/>
         ${isNew ? '<span class="absolute top-2 left-2 bg-tertiary text-white font-label-sm text-label-sm px-2 py-1 rounded">New</span>' : ""}
         <button type="button" class="btn-favorite absolute top-2 right-2 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-on-surface hover:text-error transition-colors">
           <span class="material-symbols-outlined icon-md" data-icon="favorite">favorite</span>
@@ -274,10 +285,11 @@ function renderHomeCard(product) {
 
 function renderBrowseCard(product) {
   const isNew = isRecentlyAdded(product.createdAt);
+  const imageUrl = getProductImage(product);
   return `
     <div class="product-card group bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant hover:shadow-lg transition-all duration-300 cursor-pointer" data-product-id="${product.id}" data-product="${encodeProductData(product)}">
       <div class="relative h-48 bg-surface-container-highest overflow-hidden">
-        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${escapeHtml(product.name)}" src="${escapeHtml(product.imageUrl)}"/>
+        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="${escapeHtml(product.name)}" src="${escapeHtml(imageUrl)}"/>
         <button type="button" class="btn-favorite absolute top-3 right-3 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-white transition-colors">
           <span class="material-symbols-outlined">favorite</span>
         </button>
@@ -306,6 +318,12 @@ function emptyState(message, showVendorLink = true) {
     ? ` <a href="vendor.html" class="text-primary hover:underline">Add a product</a>`
     : "";
   return `<p class="col-span-full text-center text-on-surface-variant font-body-md py-12">${escapeHtml(message)}${vendorLink}</p>`;
+}
+
+function getProductImage(product) {
+  if (product.imageUrl) return product.imageUrl;
+  const label = encodeURIComponent(product.category || "Product");
+  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640'%3E%3Crect width='640' height='640' fill='%23f5f5f4'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='36' fill='%2357534e'%3E${label}%3C/text%3E%3C/svg%3E`;
 }
 
 function formatPrice(price) {

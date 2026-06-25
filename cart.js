@@ -2,7 +2,7 @@ import { auth, db } from "./firebase.js";
 import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 const CART_KEY = "easybuy_cart";
-const DELIVERY_FEE = 150;
+const DELIVERY_FEE = 50;
 const VAT_RATE = 0.15;
 const CART_DEBOUNCE_MS = 300;
 
@@ -27,6 +27,11 @@ export function getCart() {
 export function saveCart(items) {
   localStorage.setItem(CART_KEY, JSON.stringify(items));
   window.dispatchEvent(new CustomEvent("cart-updated"));
+}
+
+export function clearCart() {
+  saveCart([]);
+  scheduleSync();
 }
 
 export function addToCart(item) {

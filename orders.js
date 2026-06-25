@@ -41,7 +41,12 @@ export function saveOrder(paymentInfo = {}) {
     serviceFee,
     total,
     paymentMethod: paymentInfo.method || "cash",
+    paymentProvider: paymentInfo.provider || paymentInfo.method || "cash",
+    paymentStatus: paymentInfo.status || "paid",
+    paymentReference: paymentInfo.reference || "",
+    transactionId: paymentInfo.transactionId || "",
     mobileNumber: paymentInfo.mobileNumber || "",
+    bankReference: paymentInfo.bankReference || "",
     status: "placed",
     createdAt: serverTimestamp(),
   });

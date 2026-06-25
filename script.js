@@ -1,6 +1,7 @@
 import {
   getCart,
   addToCart,
+  clearCart,
   removeFromCart,
   updateCartQty,
   getCartCount,
@@ -12,7 +13,7 @@ import {
 import { saveOrder } from "./orders.js";
 
 const PAGES = {
-  home: "index.html",
+  home: "home.html",
   browse: "Browse.html",
   product: "productlisting.html",
   cart: "cart.html",
@@ -156,16 +157,7 @@ function initActionButtons() {
   });
 
   document.querySelectorAll(".btn-pay-now").forEach((el) => {
-    el.addEventListener("click", async () => {
-      const methodRadio = document.querySelector("input[name='payment']:checked");
-      const mobileInput = document.getElementById("mobile-money-number");
-      const paymentInfo = {
-        method: methodRadio ? methodRadio.id : "cash",
-        mobileNumber: mobileInput ? mobileInput.value.trim() : "",
-      };
-      await saveOrder(paymentInfo);
-      go(PAGES.orders);
-    });
+    el.addEventListener("click", () => handlePayment(el));
   });
 
   document.querySelectorAll("[data-nav='cart']").forEach((el) => {
@@ -410,25 +402,180 @@ function escapeHtml(str) {
 }
 
 function initPaymentPage() {
+  updatePaymentMethodUI();
   document.querySelectorAll('input[name="payment"]').forEach((radio) => {
     radio.addEventListener("change", (e) => {
-      const inputSection = document.getElementById("mobile-money-input");
-      if (!inputSection) return;
-      const label = inputSection.querySelector("label");
-
-      if (e.target.id === "bank") {
-        inputSection.classList.add("opacity-50", "pointer-events-none");
-      } else {
-        inputSection.classList.remove("opacity-50", "pointer-events-none");
-        if (label) {
-          label.textContent =
-            e.target.id === "orange"
-              ? "Enter Orange Money Number"
-              : "Enter Africell Money Number";
-        }
-      }
+      updatePaymentMethodUI(e.target.id);
     });
   });
+
+  const payBtn = document.querySelector(".btn-pay-now");
+  if (payBtn && getCart().length === 0) {
+    payBtn.disabled = true;
+    payBtn.classList.add("opacity-60", "cursor-not-allowed");
+  }
+}
+
+function updatePaymentMethodUI(method = document.querySelector("input[name='payment']:checked")?.id || "orange") {
+  const inputSection = document.getElementById("mobile-money-input");
+  if (!inputSection) return;
+
+  const label = inputSection.querySelector("label");
+  const input = document.getElementById("mobile-money-number");
+  const help = inputSection.querySelector("p");
+
+  inputSection.classList.remove("opacity-50", "pointer-events-none");
+
+  if (method === "bank") {
+    if (label) label.textContent = "Bank Transfer Reference";
+    if (input) {
+      input.value = getBankReference();
+      input.readOnly = true;
+      input.placeholder = "EB-PAY-000000";
+    }
+    if (help) help.innerHTML = `<span class="material-symbols-outlined text-body-sm mt-0.5">info</span>Transfer to Easy Buy Escrow. Use this reference so your order can be matched.`;
+    return;
+  }
+
+  if (label) {
+    label.textContent = method === "orange" ? "Enter Orange Money Number" : "Enter Africell Money Number";
+  }
+  if (input) {
+    input.readOnly = false;
+    input.placeholder = "76 000 000";
+    if (input.value.startsWith("EB-PAY-")) input.value = "";
+  }
+  if (help) help.innerHTML = `<span class="material-symbols-outlined text-body-sm mt-0.5">info</span>You will receive a prompt on your phone to authorize the transaction.`;
+}
+
+async function handlePayment(button) {
+  const cart = getCart();
+  if (cart.length === 0) {
+    showPaymentAlert("Your cart is empty. Add an item before paying.", "error");
+    return;
+  }
+
+  const method = document.querySelector("input[name='payment']:checked")?.id || "orange";
+  const mobileInput = document.getElementById("mobile-money-number");
+  const rawValue = mobileInput ? mobileInput.value.trim() : "";
+  const validation = validatePayment(method, rawValue);
+  if (!validation.ok) {
+    showPaymentAlert(validation.message, "error");
+    mobileInput?.focus();
+    return;
+  }
+
+  setPaymentLoading(button, true);
+  showPaymentAlert("Processing payment. Please wait...", "info");
+
+  try {
+    const paymentResult = await simulatePaymentAuthorization(method, validation.value);
+    await saveOrder({
+      method,
+      provider: getPaymentProvider(method),
+      status: "paid",
+      mobileNumber: method === "bank" ? "" : validation.value,
+      bankReference: method === "bank" ? validation.value : "",
+      reference: paymentResult.reference,
+      transactionId: paymentResult.transactionId,
+    });
+    clearCart();
+    showPaymentAlert("Payment successful. Redirecting to your order...", "success");
+    setTimeout(() => go(PAGES.orders), 700);
+  } catch (err) {
+    console.error("Payment failed:", err);
+    showPaymentAlert(err.message || "Payment failed. Please try again.", "error");
+    setPaymentLoading(button, false);
+  }
+}
+
+function validatePayment(method, value) {
+  if (method === "bank") {
+    if (!value) return { ok: false, message: "Bank reference is missing. Select Bank Transfer again." };
+    return { ok: true, value };
+  }
+
+  let digits = value.replace(/\D/g, "");
+  if (digits.startsWith("232")) digits = digits.slice(3);
+  if (digits.startsWith("0")) digits = digits.slice(1);
+
+  if (digits.length !== 8) {
+    return { ok: false, message: "Enter a Sierra Leone mobile number like 075674419 or 75674419." };
+  }
+  if (!/^(25|30|33|34|44|55|76|77|78|79|88|99)/.test(digits)) {
+    return { ok: false, message: "Enter a valid Sierra Leone mobile number prefix." };
+  }
+  return { ok: true, value: `+232${digits}` };
+}
+
+function simulatePaymentAuthorization(method, value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (!value) {
+        reject(new Error("Payment details are incomplete."));
+        return;
+      }
+      resolve({
+        reference: method === "bank" ? value : getBankReference(),
+        transactionId: `TX-${Date.now()}-${Math.floor(Math.random() * 900 + 100)}`,
+      });
+    }, 1200);
+  });
+}
+
+function setPaymentLoading(button, loading) {
+  if (!button) return;
+  button.disabled = loading;
+  button.classList.toggle("opacity-70", loading);
+  button.classList.toggle("cursor-wait", loading);
+  button.innerHTML = loading
+    ? `<span class="material-symbols-outlined animate-spin">progress_activity</span>Processing`
+    : `<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>Pay Now`;
+}
+
+function showPaymentAlert(message, type) {
+  const alert = document.getElementById("payment-alert");
+  if (!alert) {
+    showToast(message);
+    return;
+  }
+
+  alert.textContent = message;
+  alert.classList.remove(
+    "hidden",
+    "bg-error-container",
+    "text-on-error-container",
+    "border-error/30",
+    "bg-secondary-container",
+    "text-on-secondary-container",
+    "border-secondary/30",
+    "bg-surface-container-low",
+    "text-on-surface-variant",
+    "border-outline-variant"
+  );
+
+  if (type === "success") {
+    alert.classList.add("bg-secondary-container", "text-on-secondary-container", "border-secondary/30");
+  } else if (type === "info") {
+    alert.classList.add("bg-surface-container-low", "text-on-surface-variant", "border-outline-variant");
+  } else {
+    alert.classList.add("bg-error-container", "text-on-error-container", "border-error/30");
+  }
+}
+
+function getPaymentProvider(method) {
+  if (method === "orange") return "Orange Money";
+  if (method === "africell") return "Africell Money";
+  return "Bank Transfer";
+}
+
+function getBankReference() {
+  let reference = sessionStorage.getItem("easybuy_bank_reference");
+  if (!reference) {
+    reference = `EB-PAY-${Date.now().toString().slice(-6)}`;
+    sessionStorage.setItem("easybuy_bank_reference", reference);
+  }
+  return reference;
 }
 
 function initOrdersPage() {
@@ -470,7 +617,7 @@ function generateInvoice(orderId, dateText, items, totalText) {
     const num = parseFloat((item.priceText || "0").replace(/[^0-9.]/g, "").replace(/,/g, "")) || 0;
     return sum + num * (item.qty || 1);
   }, 0);
-  const deliveryFee = subtotal > 0 ? 45000 : 0;
+  const deliveryFee = subtotal > 0 ? 50 : 0;
   const serviceFee = Math.round(subtotal * 0.01);
   const tax = Math.round(subtotal * 0.15);
   const grandTotal = subtotal + deliveryFee + serviceFee + tax;

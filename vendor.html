@@ -27,9 +27,9 @@ onAuthStateChanged(auth, (user) => {
 <header class="bg-surface-container-lowest sticky top-0 z-50 shadow-sm">
 <nav class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-max-width-desktop mx-auto h-16">
 <div class="flex items-center gap-6 md:gap-8">
-<a href="index.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
+<a href="home.html" class="site-logo font-headline-md text-headline-md font-bold text-primary shrink-0">Easy Buy</a>
 <div class="hidden md:flex items-center gap-6">
-<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="index.html">Home</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="home.html">Home</a>
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="Browse.html">Categories</a>
 <a class="text-primary border-b-2 border-primary font-body-md text-body-md" href="vendor-auth.html">Sell</a>
 <a class="text-on-surface-variant font-body-md text-body-md hover:text-primary transition-colors" href="cart.html">Cart</a>
@@ -143,11 +143,26 @@ Product Image
 <span id="submit-text">Publish Product</span>
 </button>
 </form>
+
+<section class="mt-10 bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30">
+<div class="flex items-center justify-between gap-4 mb-5">
+<div>
+<h2 class="font-headline-md text-headline-md flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+Your Products
+</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Manage products published from this vendor account.</p>
+</div>
+</div>
+<div id="vendor-products-list" class="space-y-3">
+<p class="text-center text-on-surface-variant font-body-sm py-6">Loading your products...</p>
+</div>
+</section>
 </div>
 </main>
 
 <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 md:hidden bg-surface-container-lowest shadow-lg">
-<a href="index.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
+<a href="home.html" class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform no-underline">
 <span class="material-symbols-outlined" data-icon="home">home</span>
 <span class="font-label-sm text-label-sm">Home</span>
 </a>

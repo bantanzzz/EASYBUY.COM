@@ -2,6 +2,7 @@
 module.exports = {
   content: [
     "./index.html",
+    "./home.html",
     "./Browse.html",
     "./productlisting.html",
     "./cart.html",
